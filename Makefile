@@ -1,5 +1,11 @@
+init:
+	bundle install -j4 --path vendor/bundle
+
 compile:
-	@sass sass/main.scss:css/main.css --style compressed
+	bundle exec sass sass/main.scss:css/main.css --style compressed
 
 watch:
-	@sass --watch sass/main.scss:css/main.css --style compressed
+	bundle exec sass --watch sass/main.scss:css/main.css --style compressed
+
+comvert:
+	bundle exec slimrb -p views/index.slim > index.html
