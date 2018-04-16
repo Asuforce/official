@@ -7,5 +7,5 @@ compile:
 watch:
 	bundle exec sass --watch sass/main.scss:css/main.css --style compressed
 
-comvert:
+convert:
 	bundle exec slimrb -p views/index.slim > index.html
