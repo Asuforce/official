@@ -1,11 +1,4 @@
 # Official
 
-This is source that [@Asuforce](https://twitter.com/asuforce) web site.
+This is source that [@Asuforce](https://twitter.com/asuforce) web
 
-## Usage
-
-See Makefile
-
-```sh
-cat Makefile
-```
