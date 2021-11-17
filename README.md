@@ -1,4 +1,3 @@
 # Official
 
-This is source that [@Asuforce](https://twitter.com/asuforce) web
-
+Source code for [asuforce.com](https://asuforce.com)
