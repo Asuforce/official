@@ -1,81 +1,282 @@
 <!DOCTYPE html>
-<html lang="ja" prefix="og: http://ogp.me/ns#">
+<html lang="en">
 
 <head>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-150930189-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || []
-    function gtag() {
-      dataLayer.push(arguments)
-    }
-    gtag('js', new Date())
-
-    gtag('config', 'UA-150930189-1')
-  </script>
-
   <meta charset="UTF-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <meta content="ie=edge" http-equiv="X-UA-Compatible" />
-  <link rel="preload" as="image"
-    href="https://rawcdn.githack.com/Asuforce/official/50b147a8cbc27f116fb4e8a1a584b0fc6f9bcb76/img/background.jpg"
-    crossorigin>
-  <link href="https://rawcdn.githack.com/Asuforce/official/1fd5f1ef1daf5eb09fbf0c31f61bb7ec4d824d04/style.css"
-    rel="stylesheet" />
-  <link href="https://rawcdn.githack.com/Asuforce/official/439a94f0ab6ca80031a3c402f147103ccd56232c/img/favicon.ico"
-    rel="icon" />
-  <title>Asuforce.com</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-  <!-- Primary Meta Tags -->
-  <meta name="title" content="Asuforce.com" />
-  <meta name="description" content="Here is sun(@Asuforce) official site" />
+  <title>Asuforce.com</title>
+  <meta name="description" content="Shun Nishitsuji (@asuforce) — DevOps / SRE Engineer" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Asuforce.com" />
+  <meta property="og:description" content="Shun Nishitsuji (@asuforce) — DevOps / SRE Engineer" />
+  <meta property="og:url" content="https://asuforce.com/" />
+  <meta property="og:image" content="https://asuforce.com/img/obake.jpg" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://asuforce.com/" />
   <meta property="twitter:title" content="Asuforce.com" />
-  <meta property="twitter:description" content="Here is sun(@Asuforce) official site" />
-  <meta property="twitter:image"
-    content="https://rawcdn.githack.com/Asuforce/official/bf50ee7ae1ad0cd4f01a34eaac3c8be68b26b2f6/img/obake.jpg" />
+  <meta property="twitter:description" content="Shun Nishitsuji (@asuforce) — Software Engineer" />
+  <meta property="twitter:image" content="https://asuforce.com/img/obake.jpg" />
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-150930189-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || []
+    function gtag() { dataLayer.push(arguments) }
+    gtag('js', new Date())
+    gtag('config', 'UA-150930189-1')
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;900&family=Space+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+
+  <link rel="icon" href="/img/favicon.ico" />
 </head>
 
 <body>
-  <header role="banner">
-    <div class="title">
-      Asuforce.com
+  <div class="noise" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav id="site-nav" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a href="#about" class="nav-logo" aria-label="Home">Asuforce.com</a>
+      <button id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul id="nav-links" role="list">
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#works" class="nav-link">Works</a></li>
+        <li><a href="#career" class="nav-link">Career</a></li>
+        <li><a href="#links" class="nav-link">Links</a></li>
+      </ul>
     </div>
-    <p class="sub_title">
-      <span class="black">
-        Here is sun(@Asuforce) official site
-      </span>
-    </p>
-  </header>
-  <main role="main">
-    <a href="https://github.com/asuforce">
-      <img src="https://github-readme-stats.vercel.app/api?username=asuforce&show_icons=true&theme=dark"
-        alt="Github Stats Card" />
-    </a>
-    <div class="heading">
-      Social
-    </div>
-    <ul>
-      <li>
-        <a href="https://twitter.com/asuforce">
-          <span class="black">Twitter</span>
-        </a>
-      </li>
-      <li>
-        <a href="https://github.com/Asuforce">
-          <span class="black">GitHub</span>
-        </a>
-      </li>
-    </ul>
+  </nav>
+
+  <main>
+    <!-- About -->
+    <section id="about">
+      <div class="container">
+        <div class="hero-content">
+          <p class="hero-label">// DEVOPS / SRE ENGINEER</p>
+          <h1 class="hero-title">
+            <span class="hero-first">Sun</span>
+            <span class="hero-last">@asuforce</span>
+          </h1>
+          <p class="hero-handle">Shun NISHITSUJI</p>
+          <div class="hero-divider"></div>
+          <p class="hero-bio">
+            10+ years in DevOps and SRE. Specializes in large-scale Kubernetes infrastructure,
+            CI/CD platform engineering, and engineering management.
+          </p>
+        </div>
+        <div class="hero-coords" aria-hidden="true">
+          <span>35.6762° N</span>
+          <span>139.6503° E</span>
+        </div>
+      </div>
+      <div class="hero-grid-bg" aria-hidden="true"></div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills">
+      <div class="container">
+        <header class="section-header" data-animate>
+          <span class="section-label">// 01</span>
+          <h2 class="section-title">SKILLS</h2>
+        </header>
+        <div class="skills-grid" data-animate data-animate-delay="1">
+          <div class="skill-category">
+            <h3 class="skill-category-title">Languages</h3>
+            <ul class="skill-list" role="list">
+              <li>Go</li>
+              <li>Ruby</li>
+              <li>Python</li>
+              <li>TypeScript</li>
+            </ul>
+          </div>
+          <div class="skill-category">
+            <h3 class="skill-category-title">Container / Infra</h3>
+            <ul class="skill-list" role="list">
+              <li>Kubernetes</li>
+              <li>Docker</li>
+              <li>Terraform</li>
+            </ul>
+          </div>
+          <div class="skill-category">
+            <h3 class="skill-category-title">Observability</h3>
+            <ul class="skill-list" role="list">
+              <li>Prometheus</li>
+              <li>Grafana</li>
+              <li>Fluentd</li>
+            </ul>
+          </div>
+          <div class="skill-category">
+            <h3 class="skill-category-title">Cloud</h3>
+            <ul class="skill-list" role="list">
+              <li>AWS</li>
+              <li>GCP</li>
+              <li>Cloudflare</li>
+            </ul>
+          </div>
+          <div class="skill-category">
+            <h3 class="skill-category-title">CI / CD</h3>
+            <ul class="skill-list" role="list">
+              <li>GitHub Actions</li>
+              <li>ArgoCD</li>
+            </ul>
+          </div>
+          <div class="skill-category">
+            <h3 class="skill-category-title">Frontend</h3>
+            <ul class="skill-list" role="list">
+              <li>React</li>
+              <li>Vue.js</li>
+              <li>Vite</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Works -->
+    <section id="works">
+      <div class="container">
+        <header class="section-header" data-animate>
+          <span class="section-label">// 02</span>
+          <h2 class="section-title">WORKS</h2>
+        </header>
+        <div class="works-grid">
+          <article class="work-card" data-animate data-animate-delay="1">
+            <div class="work-card-inner">
+              <p class="work-meta">LY Corporation / Platform</p>
+              <h3 class="work-title">ArgoCD Platform</h3>
+              <p class="work-desc">
+                Large-scale CD platform serving 1,800+ users and 10,000+ applications.
+                Led scaling, reliability (99% uptime), DR design, and team management as service owner.
+              </p>
+              <p class="work-tech">Kubernetes · ArgoCD · Terraform · Prometheus · Go</p>
+            </div>
+          </article>
+          <article class="work-card" data-animate data-animate-delay="2">
+            <div class="work-card-inner">
+              <p class="work-meta">LINE / Tooling</p>
+              <h3 class="work-title">Distributed Load Testing Tool</h3>
+              <p class="work-desc">
+                Built a distributed load testing tool in Go on Kubernetes,
+                enabling 10x scale performance testing across multiple services.
+              </p>
+              <p class="work-tech">Go · Kubernetes · Docker</p>
+            </div>
+          </article>
+          <article class="work-card" data-animate data-animate-delay="3">
+            <div class="work-card-inner">
+              <p class="work-meta">Personal / Web</p>
+              <h3 class="work-title">asuforce.com</h3>
+              <p class="work-desc">
+                This portfolio site. Static site with Marathon-inspired graphic realism design.
+              </p>
+              <p class="work-tech">Vite · TypeScript · CSS</p>
+              <a href="https://github.com/Asuforce/official" class="work-link" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Career -->
+    <section id="career">
+      <div class="container">
+        <header class="section-header" data-animate>
+          <span class="section-label">// 03</span>
+          <h2 class="section-title">CAREER</h2>
+        </header>
+        <div class="timeline" data-animate data-animate-delay="1">
+          <div class="timeline-item">
+            <p class="timeline-period">Mar 2026 – Present</p>
+            <p class="timeline-role">Product Engineer</p>
+            <p class="timeline-company">SmartHR, Inc.</p>
+          </div>
+          <div class="timeline-item">
+            <p class="timeline-period">Oct 2023 – Feb 2026</p>
+            <p class="timeline-role">DevOps Engineer / EM</p>
+            <p class="timeline-company">LY Corporation</p>
+            <p class="timeline-desc">
+              Led the ArgoCD platform team as service owner and engineering manager.
+              Scaled the platform from 850 to 1,800+ users and 10,000+ applications.
+              Designed DR/BCP systems, introduced horizontal scaling, and built team onboarding processes.
+            </p>
+          </div>
+          <div class="timeline-item">
+            <p class="timeline-period">Jun 2018 – Sep 2023</p>
+            <p class="timeline-role">SRE / EM</p>
+            <p class="timeline-company">LINE Corporation</p>
+            <p class="timeline-desc">
+              Managed multi-service infrastructure for LINE Baito and LINE LIVE.
+              Led Kubernetes (VKS) adoption, built a distributed load testing tool in Go,
+              and introduced ArgoCD across the organization (850+ apps, 480+ users).
+              Promoted to engineering manager, reducing inquiry response time by 50%.
+            </p>
+          </div>
+          <div class="timeline-item">
+            <p class="timeline-period">Apr 2016 – May 2018</p>
+            <p class="timeline-role">Infrastructure Engineer</p>
+            <p class="timeline-company">GMO Pepabo, Inc.</p>
+            <p class="timeline-desc">
+              Operated large-scale infrastructure for minne (300 servers, millions of users).
+              Led a deploy optimization project that cut deployment time by 50% (50 min → 25 min).
+              Designed and ran a 6-month onboarding program for new graduate engineers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Links -->
+    <section id="links">
+      <div class="container">
+        <header class="section-header" data-animate>
+          <span class="section-label">// 04</span>
+          <h2 class="section-title">LINKS</h2>
+        </header>
+        <ul class="links-list" role="list" data-animate data-animate-delay="1">
+          <li>
+            <a href="https://github.com/Asuforce" class="link-item" target="_blank" rel="noopener noreferrer">
+              <span class="link-label">GitHub</span>
+              <span class="link-url">github.com/Asuforce</span>
+              <span class="link-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://x.com/asuforce" class="link-item" target="_blank" rel="noopener noreferrer">
+              <span class="link-label">X</span>
+              <span class="link-url">x.com/asuforce</span>
+              <span class="link-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
   </main>
-  <footer class="blockquote-footer" role="contentinfo">
-    Copyright (c)
-    <a href="https://twitter.com/asuforce">Shun Nishitsuji</a>
-    All rights reserved.
+
+  <footer>
+    <div class="container">
+      <p class="footer-copy">
+        <span class="footer-copy-symbol">©</span> Shun Nishitsuji. All rights reserved.
+      </p>
+    </div>
   </footer>
+
+  <script type="module" src="/src/main.ts"></script>
 </body>
 
 </html>
