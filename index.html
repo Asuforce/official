@@ -41,8 +41,8 @@
 </head>
 
 <body>
+  <a href="#main" class="skip-link">Skip to content</a>
   <div class="noise" aria-hidden="true"></div>
-  <div class="scanlines" aria-hidden="true"></div>
 
   <!-- Navigation -->
   <nav id="site-nav" aria-label="Primary navigation">
@@ -58,41 +58,44 @@
         <li><a href="#skills" class="nav-link">Skills</a></li>
         <li><a href="#works" class="nav-link">Works</a></li>
         <li><a href="#career" class="nav-link">Career</a></li>
-        <li><a href="#links" class="nav-link">Links</a></li>
+        <li><a href="#links" class="nav-link">Contact</a></li>
       </ul>
     </div>
   </nav>
 
-  <main>
+  <main id="main">
     <!-- About -->
     <section id="about">
-      <div class="container">
+      <div class="hero-grid-bg" aria-hidden="true"></div>
+      <canvas class="hero-field" aria-hidden="true"></canvas>
+      <div class="container hero-stage">
         <div class="hero-content">
-          <p class="hero-label">// DEVOPS / SRE ENGINEER</p>
+          <p class="hero-label">// PRODUCT ENGINEER</p>
           <h1 class="hero-title">
             <span class="hero-first">Sun</span>
             <span class="hero-last">@asuforce</span>
           </h1>
           <p class="hero-handle">Shun NISHITSUJI</p>
+        </div>
+        <div class="hero-about">
           <div class="hero-divider"></div>
           <p class="hero-bio">
             10+ years in DevOps and SRE. Specializes in large-scale Kubernetes infrastructure,
             CI/CD platform engineering, and engineering management.
           </p>
         </div>
-        <div class="hero-coords" aria-hidden="true">
-          <span>35.6762° N</span>
-          <span>139.6503° E</span>
-        </div>
       </div>
-      <div class="hero-grid-bg" aria-hidden="true"></div>
+      <div class="container hero-foot">
+        <a href="#skills" class="scroll-cue">Scroll<span aria-hidden="true"></span></a>
+        <span class="hero-foot-note" aria-hidden="true"><i></i>Syncing<i class="is-synced"></i>Synced — Fig. 01, illustration</span>
+      </div>
     </section>
 
     <!-- Skills -->
     <section id="skills">
       <div class="container">
         <header class="section-header" data-animate>
-          <span class="section-label">// 01</span>
+          <span class="section-num" aria-hidden="true">01</span>
           <h2 class="section-title">SKILLS</h2>
         </header>
         <div class="skills-grid" data-animate data-animate-delay="1">
@@ -152,43 +155,24 @@
     <section id="works">
       <div class="container">
         <header class="section-header" data-animate>
-          <span class="section-label">// 02</span>
+          <span class="section-num" aria-hidden="true">02</span>
           <h2 class="section-title">WORKS</h2>
         </header>
-        <div class="works-grid">
-          <article class="work-card" data-animate data-animate-delay="1">
-            <div class="work-card-inner">
-              <p class="work-meta">LY Corporation / Platform</p>
-              <h3 class="work-title">ArgoCD Platform</h3>
-              <p class="work-desc">
-                Large-scale CD platform serving 1,800+ users and 10,000+ applications.
-                Led scaling, reliability (99% uptime), DR design, and team management as service owner.
-              </p>
-              <p class="work-tech">Kubernetes · ArgoCD · Terraform · Prometheus · Go</p>
-            </div>
-          </article>
-          <article class="work-card" data-animate data-animate-delay="2">
-            <div class="work-card-inner">
-              <p class="work-meta">LINE / Tooling</p>
-              <h3 class="work-title">Distributed Load Testing Tool</h3>
-              <p class="work-desc">
-                Built a distributed load testing tool in Go on Kubernetes,
-                enabling 10x scale performance testing across multiple services.
-              </p>
-              <p class="work-tech">Go · Kubernetes · Docker</p>
-            </div>
-          </article>
-          <article class="work-card" data-animate data-animate-delay="3">
-            <div class="work-card-inner">
-              <p class="work-meta">Personal / Web</p>
-              <h3 class="work-title">asuforce.com</h3>
-              <p class="work-desc">
-                This portfolio site. Static site with Marathon-inspired graphic realism design.
-              </p>
-              <p class="work-tech">Vite · TypeScript · CSS</p>
-              <a href="https://github.com/Asuforce/official" class="work-link" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-            </div>
-          </article>
+        <div class="entries" data-animate data-animate-delay="1">
+          <div class="entry">
+            <p class="entry-meta">LY Corporation / Platform</p>
+            <h3 class="entry-title">ArgoCD Platform</h3>
+            <p class="entry-desc">
+              Large-scale CD platform serving 1,800+ users and 10,000+ applications at 99% uptime.
+            </p>
+            <p class="entry-tech">Kubernetes · ArgoCD · Terraform · Prometheus · Go</p>
+          </div>
+          <div class="entry">
+            <p class="entry-meta">LINE / Tooling</p>
+            <h3 class="entry-title">Distributed Load Testing Tool</h3>
+            <p class="entry-desc">Enabled 10x scale performance testing across multiple services.</p>
+            <p class="entry-tech">Go · Kubernetes · Docker</p>
+          </div>
         </div>
       </div>
     </section>
@@ -197,41 +181,41 @@
     <section id="career">
       <div class="container">
         <header class="section-header" data-animate>
-          <span class="section-label">// 03</span>
+          <span class="section-num" aria-hidden="true">03</span>
           <h2 class="section-title">CAREER</h2>
         </header>
-        <div class="timeline" data-animate data-animate-delay="1">
-          <div class="timeline-item">
-            <p class="timeline-period">Mar 2026 – Present</p>
-            <p class="timeline-role">Product Engineer</p>
-            <p class="timeline-company">SmartHR, Inc.</p>
+        <div class="entries" data-animate data-animate-delay="1">
+          <div class="entry is-current">
+            <p class="entry-meta">Mar 2026 – Present</p>
+            <p class="entry-title">Product Engineer</p>
+            <p class="entry-sub">SmartHR, Inc.</p>
           </div>
-          <div class="timeline-item">
-            <p class="timeline-period">Oct 2023 – Feb 2026</p>
-            <p class="timeline-role">DevOps Engineer / EM</p>
-            <p class="timeline-company">LY Corporation</p>
-            <p class="timeline-desc">
+          <div class="entry">
+            <p class="entry-meta">Oct 2023 – Feb 2026</p>
+            <p class="entry-title">DevOps Engineer / EM</p>
+            <p class="entry-sub">LY Corporation</p>
+            <p class="entry-desc">
               Led the ArgoCD platform team as service owner and engineering manager.
-              Scaled the platform from 850 to 1,800+ users and 10,000+ applications.
-              Designed DR/BCP systems, introduced horizontal scaling, and built team onboarding processes.
+              Grew the user base from 850, designed DR/BCP systems, introduced horizontal scaling,
+              and built team onboarding processes.
             </p>
           </div>
-          <div class="timeline-item">
-            <p class="timeline-period">Jun 2018 – Sep 2023</p>
-            <p class="timeline-role">SRE / EM</p>
-            <p class="timeline-company">LINE Corporation</p>
-            <p class="timeline-desc">
+          <div class="entry">
+            <p class="entry-meta">Jun 2018 – Sep 2023</p>
+            <p class="entry-title">SRE / EM</p>
+            <p class="entry-sub">LINE Corporation</p>
+            <p class="entry-desc">
               Managed multi-service infrastructure for LINE Baito and LINE LIVE.
-              Led Kubernetes (VKS) adoption, built a distributed load testing tool in Go,
-              and introduced ArgoCD across the organization (850+ apps, 480+ users).
+              Led Kubernetes (VKS) adoption and introduced ArgoCD across the organization
+              (850+ apps, 480+ users).
               Promoted to engineering manager, reducing inquiry response time by 50%.
             </p>
           </div>
-          <div class="timeline-item">
-            <p class="timeline-period">Apr 2016 – May 2018</p>
-            <p class="timeline-role">Infrastructure Engineer</p>
-            <p class="timeline-company">GMO Pepabo, Inc.</p>
-            <p class="timeline-desc">
+          <div class="entry">
+            <p class="entry-meta">Apr 2016 – May 2018</p>
+            <p class="entry-title">Infrastructure Engineer</p>
+            <p class="entry-sub">GMO Pepabo, Inc.</p>
+            <p class="entry-desc">
               Operated large-scale infrastructure for minne (300 servers, millions of users).
               Led a deploy optimization project that cut deployment time by 50% (50 min → 25 min).
               Designed and ran a 6-month onboarding program for new graduate engineers.
@@ -245,8 +229,8 @@
     <section id="links">
       <div class="container">
         <header class="section-header" data-animate>
-          <span class="section-label">// 04</span>
-          <h2 class="section-title">LINKS</h2>
+          <span class="section-num" aria-hidden="true">04</span>
+          <h2 class="section-title">CONTACT</h2>
         </header>
         <ul class="links-list" role="list" data-animate data-animate-delay="1">
           <li>
@@ -269,10 +253,12 @@
   </main>
 
   <footer>
-    <div class="container">
+    <div class="container footer-inner">
       <p class="footer-copy">
         <span class="footer-copy-symbol">©</span> Shun Nishitsuji. All rights reserved.
       </p>
+      <span class="footer-barcode" aria-hidden="true"></span>
+      <a href="#about" class="footer-top">Back to top ↑</a>
     </div>
   </footer>
 
