@@ -67,9 +67,9 @@
   --blue-glow:     rgba(26, 95, 224, 0.18);
   --blue-dim:      rgba(26, 95, 224, 0.08);
 
-  --yellow:        #956a00;
-  --yellow-glow:   rgba(149, 106, 0, 0.18);
-  --yellow-dim:    rgba(149, 106, 0, 0.08);
+  --yellow:        #8a6200;
+  --yellow-glow:   rgba(138, 98, 0, 0.18);
+  --yellow-dim:    rgba(138, 98, 0, 0.08);
 
   --text:          #323d4a;
   --text-muted:    #566679;
@@ -85,7 +85,7 @@
   --outline-faint: rgba(26, 95, 224, 0.28);
   --outline-hero:  rgba(13, 17, 23, 0.75);
   --noise-opacity: 0.04;
-  --field-accent:  149, 106, 0;
+  --field-accent:  138, 98, 0;
   --field-base:    26, 95, 224;
   --field-base-a:  0.35;
 
