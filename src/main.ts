@@ -1,5 +1,48 @@
 import '../style.css'
 
+type Theme = 'light' | 'dark'
+
+function initTheme(): void {
+  const root = document.documentElement
+  const toggle = document.getElementById('theme-toggle')
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+  const systemLight = window.matchMedia('(prefers-color-scheme: light)')
+
+  const readStored = (): Theme | null => {
+    try {
+      const saved = localStorage.getItem('theme')
+      return saved === 'light' || saved === 'dark' ? saved : null
+    } catch {
+      return null
+    }
+  }
+
+  const apply = (theme: Theme): void => {
+    root.setAttribute('data-theme', theme)
+    toggle?.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme')
+    meta?.setAttribute('content', getComputedStyle(document.body).backgroundColor)
+  }
+
+  const current = (): Theme => (root.getAttribute('data-theme') === 'light' ? 'light' : 'dark')
+
+  apply(current())
+
+  toggle?.addEventListener('click', () => {
+    const next: Theme = current() === 'dark' ? 'light' : 'dark'
+    apply(next)
+    try {
+      localStorage.setItem('theme', next)
+    } catch {
+      // Storage unavailable — the choice just won't persist
+    }
+  })
+
+  // Follow the OS setting until the visitor picks a theme explicitly
+  systemLight.addEventListener('change', (e) => {
+    if (readStored() === null) apply(e.matches ? 'light' : 'dark')
+  })
+}
+
 function initNav(): void {
   const nav = document.getElementById('site-nav')
   const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-link')
@@ -123,8 +166,20 @@ function initField(): void {
   let pointer: { x: number; y: number } | null = null
   let frameId = 0
 
+  let accent = '240, 192, 48'
+  let baseColor = 'rgba(70, 120, 235, 0.42)'
+
+  // Canvas can't use CSS variables directly, so pull the active theme's values
+  const readColors = (): void => {
+    const style = getComputedStyle(document.documentElement)
+    accent = style.getPropertyValue('--field-accent').trim() || accent
+    const base = style.getPropertyValue('--field-base').trim()
+    const alpha = style.getPropertyValue('--field-base-a').trim()
+    if (base && alpha) baseColor = `rgba(${base}, ${alpha})`
+  }
+
   const dot = (x: number, y: number, v: number): void => {
-    ctx.fillStyle = `rgba(240, 192, 48, ${v})`
+    ctx.fillStyle = `rgba(${accent}, ${v})`
     const size = 2 + v * 2.5
     ctx.fillRect(x - size / 2, y - size / 2, size, size)
   }
@@ -140,7 +195,7 @@ function initField(): void {
     ctx.drawImage(base, 0, 0, width, height)
     for (const p of pulses) dot(p.x, p.y, p.v)
     if (!pointer) return
-    ctx.strokeStyle = 'rgba(240, 192, 48, 0.7)'
+    ctx.strokeStyle = `rgba(${accent}, 0.7)`
     ctx.beginPath()
     ctx.moveTo(pointer.x - 10, pointer.y)
     ctx.lineTo(pointer.x + 10, pointer.y)
@@ -148,7 +203,7 @@ function initField(): void {
     ctx.lineTo(pointer.x, pointer.y + 10)
     ctx.stroke()
     ctx.font = '11px "JetBrains Mono", monospace'
-    ctx.fillStyle = 'rgba(240, 192, 48, 0.9)'
+    ctx.fillStyle = `rgba(${accent}, 0.9)`
     const pad = (n: number): string => String(Math.round(n)).padStart(4, '0')
     ctx.fillText(`X${pad(pointer.x)} Y${pad(pointer.y)}`, pointer.x + 16, pointer.y - 12)
     const x0 = Math.floor((pointer.x - REACH) / STEP)
@@ -177,6 +232,7 @@ function initField(): void {
   }
 
   const resize = (): void => {
+    readColors()
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
     const rect = hero.getBoundingClientRect()
     width = rect.width
@@ -190,7 +246,7 @@ function initField(): void {
     const baseCtx = base.getContext('2d')
     if (!baseCtx) return
     baseCtx.scale(dpr, dpr)
-    baseCtx.fillStyle = 'rgba(70, 120, 235, 0.42)'
+    baseCtx.fillStyle = baseColor
     for (let y = STEP / 2; y < height; y += STEP) {
       for (let x = STEP / 2; x < width; x += STEP) baseCtx.fillRect(x - 1, y - 1, 2, 2)
     }
@@ -205,6 +261,12 @@ function initField(): void {
   }
 
   new ResizeObserver(resize).observe(hero)
+
+  // Re-render the dot grid when the theme switches
+  new MutationObserver(resize).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  })
 
   if (reducedMotion.matches) return
 
@@ -221,6 +283,7 @@ function initField(): void {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  initTheme()
   initNav()
   initMobileMenu()
   initScrollAnimations()
