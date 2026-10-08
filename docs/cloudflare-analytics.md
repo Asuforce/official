@@ -1,78 +1,47 @@
-# Cloudflare Web Analytics (PoC)
+# Cloudflare Web Analytics
 
-Cookie を使わず、個人情報を収集しない Cloudflare Web Analytics を `asuforce.com` に導入するための PoC。
-既存の Google Analytics (UA-150930189-1) は Universal Analytics が 2023 年に終了しておりデータを取得できていないため、
-**Google Analytics を削除し、Cloudflare Web Analytics に置き換える**方針とする (`index.html` の gtag スニペットは削除済み)。
+Cookie を使わず、個人情報を収集しない Cloudflare Web Analytics で `asuforce.com` を計測している。
+Google Analytics (Universal Analytics は 2023 年に終了) は削除し、これに置き換えた。
 
-## 方式の選択肢
+## 方式
 
-`asuforce.com` は Cloudflare のゾーンで管理されており、Workers (static assets) で配信している。
-Workers のカスタムドメイン/ルート経由の配信はプロキシされるため、**方式 A が使える前提**とし、これを第一候補にする。
+**自動セットアップ (automatic setup)** を採用している。コードの変更はなく、Cloudflare のエッジが配信時に HTML へ beacon を注入する。
+データは自ドメインの `/cdn-cgi/rum` に送信される。
 
-| 方式 | 変更箇所 | 備考 |
-| --- | --- | --- |
-| **A. 自動セットアップ (推奨)** | なし (ダッシュボードのみ) | エッジで HTML に beacon を注入。ゾーン内の全ページ/サブドメインが対象。データは自ドメインの `/cdn-cgi/rum` に送信される |
-| B. 手動セットアップ (フォールバック) | `vite.config.ts` (実装済み) | ビルド時に `<script>` を注入。`CF_BEACON_TOKEN` 未設定なら何もしない。ブロッカー対策や、ページ単位で制御したい場合に使う |
+- 設定場所: https://dash.cloudflare.com/?to=/:account/web-analytics/sites → `asuforce.com` の **Manage Site**
+  (メニュー構成は変わることがあるため直リンクを使う)
+- 公開ページのソースに、`integrity` 属性付きの `beacon.min.js` の `<script>` が入っていることを確認済み
+  (`integrity` は自動注入のときだけ付く)。
 
-A と B を同じページに重複させないこと (1ページにつきスニペットは1つのみ有効)。
-A を採用する間は `CF_BEACON_TOKEN` を設定しない (= B は no-op のまま)。A で十分なら `vite.config.ts` のプラグインは削除してよい。
+### 確認方法
 
-## 手順 (方式 A)
+ブラウザで https://asuforce.com を開き、View Source / DevTools で `beacon.min.js` を探す。1 つだけ入っていればよい。
 
-1. Web Analytics のサイト一覧 (https://dash.cloudflare.com/?to=/:account/web-analytics/sites) を開き、`asuforce.com` の **Manage Site** から有効化の選択肢 (自動セットアップ) を選ぶ。
-   - ダッシュボードのメニュー構成は変わることがある (旧: Analytics & Logs → Web Analytics)。メニューから辿れない場合は上の直リンクを使う。
-2. しばらく待って、`curl -s https://asuforce.com | grep -o 'beacon.min.js[^>]*'` で beacon が注入されていることを確認する。
-   - 注入されない場合: Workers static assets が返す HTML にも注入されるかは、このPoCでは未検証。注入されなければ方式 B に切り替える。
-3. Web Analytics のダッシュボードでページビュー・Core Web Vitals が出ることを確認する。
+> `curl` では注入された HTML が返らないことがある。確認はブラウザで行う。
 
-## 手順 (方式 B: フォールバック)
+### 注意
 
-1. Web Analytics のサイト一覧 (上記の直リンク) でホスト名 `asuforce.com` を登録し、**JS snippet をコピーする (手動) 方式**を選ぶ。
-   ゾーンが同一アカウントにあるため、登録フローで自動注入 (方式 A) が有効になる可能性がある。
-   B を使うなら自動注入はオフのままにする。デプロイ後に `curl -s https://asuforce.com | grep -c 'beacon.min.js'` が **1** であることを確認する。
-2. 発行された snippet の `token` を控える (`data-cf-beacon='{"token": "..."}'`)。
-3. ビルド環境に `CF_BEACON_TOKEN` を設定する。
-   - Workers Builds: Worker の **Settings → Build → Build Variables and Secrets** に追加
-   - ローカル確認: `.env.local` に `CF_BEACON_TOKEN=<token>` (`*.local` は `.gitignore` 済み)
-4. デプロイ後、ダッシュボードの Web Analytics でページビュー・Core Web Vitals が出ることを確認する。
-
-> **注意: 「ビルド」変数であって「ランタイム」変数ではない。**
-> Worker の **Settings → Variables & Secrets** や `wrangler.jsonc` の `vars` に入れても、ビルド時には見えないため
-> beacon は注入されない (エラーも出ず、ただ計測されない)。「token を設定したのに何も計測されない」場合はまずここを疑う。
-> 設定後は再ビルド・再デプロイが必要。
-
-> token は公開 HTML に埋め込まれる値で秘密情報ではないが、リポジトリには置かず環境ごとに切り替えられるようにしている。
-
-## ローカル確認
-
-```sh
-npm ci
-
-# 無効 (トークンなし): beacon は含まれない
-npm run build && grep -c cloudflareinsights dist/index.html   # -> 0
-
-# 有効
-CF_BEACON_TOKEN=dummy npm run build && grep cloudflareinsights dist/index.html
-```
-
-期待される出力:
-
-```html
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;dummy&quot;}"></script>
-```
-
-`npm run dev` では注入されない (`apply: 'build'`)。
+- 1 ページにつき有効なスニペットは 1 つだけ。**手動で beacon を追加しない**こと (二重になる)。
+- CSP を導入する場合は、beacon 取得と送信先 (`static.cloudflareinsights.com` など) を許可する。
+  https://developers.cloudflare.com/web-analytics/faq/ を参照。
 
 ## 計測できるもの / できないもの
 
 - できる: PV、ユニーク訪問者 (cookie なし)、参照元、国、デバイス/ブラウザ、Core Web Vitals (LCP/INP/CLS)
-- できない: クリックなどのカスタムイベント、ユーザー単位のファネル。必要になれば別途検討する
+- できない: クリックなどのカスタムイベント、ユーザー単位のファネル
 - 本サイトは単一ページ (アンカー遷移のみ) なので、PV はほぼ訪問数と等しくなる
 
-## 判断ポイント / 次のステップ
+## 自動注入が使えなくなった場合のフォールバック
 
-- [ ] A で注入・計測できたら、`vite.config.ts` のプラグインは不要なので削除する
-- [ ] CSP を導入する場合は `script-src https://static.cloudflareinsights.com`、`connect-src https://cloudflareinsights.com` を許可する
+自動注入が効かない場合は、`index.html` の `<head>` に手動でスニペットを入れる。
+その際は**ダッシュボードの自動セットアップをオフ**にして二重注入を避けること。
+
+```html
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "<site tag>"}'></script>
+```
+
+token (site tag) は Web Analytics のサイトに紐づく公開値で、秘密情報ではない。
 
 ## 参考
 
