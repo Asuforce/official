@@ -42,7 +42,7 @@ Shun Nishitsuji (@asuforce) の個人サイト (asuforce.com)。Software Enginee
 ## Evidence on Hand
 
 - Works 2 件の本文。
-- 画像資産: `public/img/` に過去のサイトのスクリーンショット 4 枚 (`asuforce.com_*.png`)、`background.jpg`、`obake.jpg`。
+- 画像資産: `public/img/` に `obake.jpg` (ゴーストの元絵)、`og.png` (共有カード用)、`moon.jpg` (月面。`scripts/generate-moon.mjs` で生成)、`favicon.ico`。過去のサイトのスクリーンショットと `background.jpg` は削除した。
 - 推薦文、顧客名、数値の実績は確認していない。作らない。
 
 ## Product Principles
