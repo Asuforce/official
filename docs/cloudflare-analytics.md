@@ -1,8 +1,8 @@
 # Cloudflare Web Analytics (PoC)
 
 Cookie を使わず、個人情報を収集しない Cloudflare Web Analytics を `asuforce.com` に導入するための PoC。
-既存の Google Analytics (UA-150930189-1) は Universal Analytics が 2023 年に終了しているため、データは取得できていない。
-置き換え or 併用の判断材料として、まず Cloudflare 側の計測を並行して動かす。
+既存の Google Analytics (UA-150930189-1) は Universal Analytics が 2023 年に終了しておりデータを取得できていないため、
+**Google Analytics を削除し、Cloudflare Web Analytics に置き換える**方針とする (`index.html` の gtag スニペットは削除済み)。
 
 ## 方式の選択肢
 
@@ -71,7 +71,6 @@ CF_BEACON_TOKEN=dummy npm run build && grep cloudflareinsights dist/index.html
 ## 判断ポイント / 次のステップ
 
 - [ ] A で注入・計測できたら、`vite.config.ts` のプラグインは不要なので削除する
-- [ ] 数週間 Cloudflare 側の数値を観測し、GA (`index.html` の gtag スニペット) を削除してよいか判断する
 - [ ] CSP を導入する場合は `script-src https://static.cloudflareinsights.com`、`connect-src https://cloudflareinsights.com` を許可する
 
 ## 参考
