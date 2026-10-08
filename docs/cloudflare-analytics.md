@@ -14,14 +14,26 @@ Cookie を使わず、個人情報を収集しない Cloudflare Web Analytics �
 B は `index.html` にトークンを直書きせず、`CF_BEACON_TOKEN` が設定されたビルドのみ有効になる。
 A と B を同じページに重複させないこと (1ページにつきスニペットは1つのみ有効)。
 
+> `asuforce.com` が Cloudflare でプロキシされているかは、サンドボックスから外部へ到達できず未確認 (リクエストが 403 になった)。
+> 手元で確認する場合: `curl -sI https://asuforce.com` で `server: cloudflare` / `cf-ray` を見る。
+> また `curl -s https://asuforce.com | grep -c cloudflareinsights` が 0 でなければ、すでに自動注入されている (その場合は B を有効にしない)。
+> プロキシ済みなら A の方が運用が軽いので、まず A を試すのを推奨する。
+
 ## 手順 (方式 B)
 
-1. Cloudflare ダッシュボード → **Analytics & Logs → Web Analytics → Add a site** で `asuforce.com` を登録する。
+1. Cloudflare ダッシュボード → **Analytics & Logs → Web Analytics** でホスト名 `asuforce.com` を登録し、**JS snippet をコピーする (手動) 方式**を選ぶ。
+   ゾーンが同一アカウントにある場合、登録フローで自動注入 (方式 A) が有効になる可能性があるため、
+   B を使うなら自動注入はオフのままにする。デプロイ後に `curl -s https://asuforce.com | grep -c 'beacon.min.js'` が **1** であることを確認する。
 2. 発行された snippet の `token` を控える (`data-cf-beacon='{"token": "..."}'`)。
 3. ビルド環境に `CF_BEACON_TOKEN` を設定する。
-   - Workers Builds: プロジェクトの **Settings → Build → Variables and secrets** に追加
-   - ローカル確認: `.env.local` に `CF_BEACON_TOKEN=<token>` (`.gitignore` 済み)
+   - Workers Builds: Worker の **Settings → Build → Build Variables and Secrets** に追加
+   - ローカル確認: `.env.local` に `CF_BEACON_TOKEN=<token>` (`*.local` は `.gitignore` 済み)
 4. デプロイ後、ダッシュボードの Web Analytics でページビュー・Core Web Vitals が出ることを確認する。
+
+> **注意: 「ビルド」変数であって「ランタイム」変数ではない。**
+> Worker の **Settings → Variables & Secrets** や `wrangler.jsonc` の `vars` に入れても、ビルド時には見えないため
+> beacon は注入されない (エラーも出ず、ただ計測されない)。「token を設定したのに何も計測されない」場合はまずここを疑う。
+> 設定後は再ビルド・再デプロイが必要。
 
 > token は公開 HTML に埋め込まれる値で秘密情報ではないが、リポジトリには置かず環境ごとに切り替えられるようにしている。
 
