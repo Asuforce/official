@@ -1,6 +1,13 @@
 /* ===================================================================
    Design Tokens
    =================================================================== */
+@font-face {
+  font-family: 'D-DIN';
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/d-din/D-DIN-Bold.woff2') format('woff2');
+}
+
 :root {
   --bg:        #000000;
   --surface:   #1c1c1c;
@@ -13,6 +20,7 @@
   --on-accent: #000000;
 
   --font:      'Archivo Variable', system-ui, sans-serif;
+  --display:   'D-DIN', 'Archivo Variable', system-ui, sans-serif;
   --mono:      'JetBrains Mono', ui-monospace, monospace;
 
   --nav-h:     56px;
@@ -181,10 +189,10 @@ section { padding-top: clamp(96px, 12vw, 160px); }
 
 .section-title {
   font-size: clamp(2.25rem, 5vw, 3.5625rem);
-  font-weight: 300;
-  font-stretch: 125%;
+  font-family: var(--display);
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
 
 .section-header::after,
@@ -301,10 +309,10 @@ main, footer { position: relative; z-index: 2; }
   margin-block: auto;
   max-width: 12em;
   font-size: clamp(2.5rem, 6vw, 5.5rem);
-  font-weight: 300;
-  font-stretch: 125%;
+  font-family: var(--display);
+  font-weight: 700;
   line-height: 1.05;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   text-wrap: balance;
 }
@@ -373,10 +381,10 @@ main, footer { position: relative; z-index: 2; }
 
 .entry-title {
   font-size: clamp(1.5rem, 2.6vw, 2.25rem);
-  font-weight: 300;
-  font-stretch: 125%;
+  font-family: var(--display);
+  font-weight: 700;
   line-height: 1.15;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 .entry-sub { margin-top: 8px; font-size: 1.0625rem; line-height: 1.6875rem; color: var(--text-soft); }
@@ -399,10 +407,10 @@ main, footer { position: relative; z-index: 2; }
 }
 .link-label {
   font-size: clamp(1.75rem, 3.4vw, 2.75rem);
-  font-weight: 300;
-  font-stretch: 125%;
+  font-family: var(--display);
+  font-weight: 700;
   line-height: 1.1;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 .link-url { font-size: 1.0625rem; line-height: 1.6875rem; color: var(--muted); transition: color 150ms var(--ease); }
