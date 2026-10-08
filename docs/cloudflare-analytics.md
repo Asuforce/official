@@ -19,14 +19,15 @@ A を採用する間は `CF_BEACON_TOKEN` を設定しない (= B は no-op の�
 
 ## 手順 (方式 A)
 
-1. Cloudflare ダッシュボード → **Analytics & Logs → Web Analytics** で `asuforce.com` のサイトを追加し、自動セットアップ (automatic setup) を有効にする。
+1. Web Analytics のサイト一覧 (https://dash.cloudflare.com/?to=/:account/web-analytics/sites) を開き、`asuforce.com` の **Manage Site** から有効化の選択肢 (自動セットアップ) を選ぶ。
+   - ダッシュボードのメニュー構成は変わることがある (旧: Analytics & Logs → Web Analytics)。メニューから辿れない場合は上の直リンクを使う。
 2. しばらく待って、`curl -s https://asuforce.com | grep -o 'beacon.min.js[^>]*'` で beacon が注入されていることを確認する。
    - 注入されない場合: Workers static assets が返す HTML にも注入されるかは、このPoCでは未検証。注入されなければ方式 B に切り替える。
 3. Web Analytics のダッシュボードでページビュー・Core Web Vitals が出ることを確認する。
 
 ## 手順 (方式 B: フォールバック)
 
-1. Cloudflare ダッシュボード → **Analytics & Logs → Web Analytics** でホスト名 `asuforce.com` を登録し、**JS snippet をコピーする (手動) 方式**を選ぶ。
+1. Web Analytics のサイト一覧 (上記の直リンク) でホスト名 `asuforce.com` を登録し、**JS snippet をコピーする (手動) 方式**を選ぶ。
    ゾーンが同一アカウントにあるため、登録フローで自動注入 (方式 A) が有効になる可能性がある。
    B を使うなら自動注入はオフのままにする。デプロイ後に `curl -s https://asuforce.com | grep -c 'beacon.min.js'` が **1** であることを確認する。
 2. 発行された snippet の `token` を控える (`data-cf-beacon='{"token": "..."}'`)。
