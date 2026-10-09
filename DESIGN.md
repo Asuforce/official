@@ -77,7 +77,7 @@ D-DIN は Datto Inc. 製で、SIL Open Font License 1.1 (予約フォント名 "
 
 ## 共有カード
 
-`public/img/og.png` (1200x630、`og:image` と `twitter:image`)。ダークの世界をそのまま切り出す。黒の地に星 (サイトと同じ固定の乱数)、左に `ASUFORCE.COM` だけを D-DIN 112px、大文字で置き、ドメインのドットだけアクセント、下に月面 (`moon.jpg` を円弧で切り抜き、上端に 1px の白い線)、右の水平線にゴーストが着地して影を落とす。文字はこの 1 つだけで、ラベルや装飾は置かない。ライトは作らない (クローラーはテーマを選べない)。ヘッドレスの Chromium で HTML を 1200x630 に撮影して作る。HTML の原稿はリポジトリに残していない。作り直すときは、この記述と `public/fonts/d-din/`、`public/img/moon.jpg`、`index.html` のゴーストのパスから組む。
+`public/img/og.png` (1200x1200 の正方形、`og:image` と `twitter:image`、`twitter:card` は `summary`)。正方形にした理由は、Slack や LINE などが小さな正方形に中央で切り抜いて見せるため。横長 (1200x630) だと文字が欠けた。X の大きなカード (`summary_large_image`) は使えなくなる。ダークの世界をそのまま切り出す。黒の地に星 (サイトと同じ固定の乱数)、上寄りに `ASUFORCE.COM` だけを D-DIN 154px、大文字で置き、ドメインのドットだけアクセント、下に月面 (`moon.jpg` を円弧で切り抜き、上端に 1px の白い線)、右寄りの水平線にゴーストが着地して影を落とす。文字はこの 1 つだけで、ラベルや装飾は置かない。ライトは作らない (クローラーはテーマを選べない)。ヘッドレスの Chromium で HTML を 1200x630 に撮影して作る。HTML の原稿はリポジトリに残していない。作り直すときは、この記述と `public/fonts/d-din/`、`public/img/moon.jpg`、`index.html` のゴーストのパスから組む。
 
 ## ゴースト (追従する要素)
 
