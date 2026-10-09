@@ -63,6 +63,23 @@ function initNav(): void {
   }
 }
 
+function initGaze(): void {
+  const ghost = document.querySelector<HTMLElement>('.ghost-follow')
+  if (!ghost || !window.matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)').matches) return
+
+  const reach = 7
+  window.addEventListener('pointermove', (e) => {
+    if (ghost.dataset.pose === 'moon') return
+    const box = ghost.getBoundingClientRect()
+    const dx = e.clientX - (box.left + box.width / 2)
+    const dy = e.clientY - (box.top + box.height / 2)
+    const len = Math.hypot(dx, dy) || 1
+    const pull = Math.min(1, len / 400)
+    ghost.style.setProperty('--gx', String((dx / len) * pull * reach))
+    ghost.style.setProperty('--gy', String((dy / len) * pull * reach))
+  }, { passive: true })
+}
+
 function initMobileMenu(): void {
   const toggle = document.getElementById('menu-toggle')
   const menu = document.getElementById('nav-links')
@@ -177,3 +194,4 @@ initNav()
 initMobileMenu()
 initReveal()
 initStars()
+initGaze()
