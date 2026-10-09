@@ -33,7 +33,7 @@ Shun Nishitsuji (@asuforce) の個人サイト (asuforce.com)。Software Enginee
 - 掲載内容は About、Skills、Works (2 件: ArgoCD Platform、Distributed Load Testing Tool)、Career、Contact。リニューアルでも文面と事実は変えない。
 - ライト / ダークのテーマ切り替えは維持する。保存した設定、なければ OS 設定に従う。ライト側の配色は DESIGN.md に定義済み (月面とフッターは両テーマで暗いまま)。
 - 表記は英語のまま。日本語は追加しない。
-- 肩書きは「Software Engineer」に揃える。`index.html` の `description` と `og:description` は、まだ「DevOps / SRE Engineer」のまま。
+- 肩書きは「Software Engineer」に揃える。`index.html` の `description`、`og:description`、`twitter:description` は揃えてある。
 
 ## Brand Commitments
 
@@ -42,7 +42,7 @@ Shun Nishitsuji (@asuforce) の個人サイト (asuforce.com)。Software Enginee
 ## Evidence on Hand
 
 - Works 2 件の本文。
-- 画像資産: `public/img/` に `obake.jpg` (ゴーストの元絵)、`og.png` (共有カード用)、`moon.jpg` (月面。`scripts/generate-moon.mjs` で生成)、`favicon.ico`。過去のサイトのスクリーンショットと `background.jpg` は削除した。
+- 画像資産: `public/img/` に `obake.jpg` (ゴーストの元絵)、`og.png` (共有カード用)、`moon.jpg` (月面。`scripts/generate-moon.mjs` で生成)、`favicon.ico`。`asuforce.com_YYMMDD_dark.jpg` と `_light.jpg` は、リニューアル前の本番 (旧デザイン) のスクリーンショットで、アーカイブとして残す (手順は CLAUDE.md)。`background.jpg` は削除した。
 - 推薦文、顧客名、数値の実績は確認していない。作らない。
 
 ## Product Principles
