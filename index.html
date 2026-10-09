@@ -6,25 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-  <meta name="theme-color" content="#090807" />
+  <meta name="theme-color" content="#000000" />
   <title>Asuforce.com</title>
-  <meta name="description" content="Shun Nishitsuji (@asuforce) — DevOps / SRE Engineer" />
+  <meta name="description" content="Shun Nishitsuji (@asuforce) - Software Engineer" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Asuforce.com" />
-  <meta property="og:description" content="Shun Nishitsuji (@asuforce) — DevOps / SRE Engineer" />
+  <meta property="og:description" content="Shun Nishitsuji (@asuforce) - Software Engineer" />
   <meta property="og:url" content="https://asuforce.com/" />
-  <meta property="og:image" content="https://asuforce.com/img/obake.jpg" />
+  <meta property="og:image" content="https://asuforce.com/img/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Asuforce.com, with a white ghost standing on the moon under a starry sky" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://asuforce.com/" />
   <meta property="twitter:title" content="Asuforce.com" />
-  <meta property="twitter:description" content="Shun Nishitsuji (@asuforce) — Software Engineer" />
-  <meta property="twitter:image" content="https://asuforce.com/img/obake.jpg" />
+  <meta property="twitter:description" content="Shun Nishitsuji (@asuforce) - Software Engineer" />
+  <meta property="twitter:image" content="https://asuforce.com/img/og.png" />
+  <meta property="twitter:image:alt" content="Asuforce.com, with a white ghost standing on the moon under a starry sky" />
 
-  <!-- Theme: apply saved/system preference before first paint -->
   <script>
     (function () {
       var theme = 'dark'
@@ -32,22 +35,35 @@
         var saved = localStorage.getItem('theme')
         if (saved === 'light' || saved === 'dark') theme = saved
         else if (window.matchMedia('(prefers-color-scheme: light)').matches) theme = 'light'
-      } catch (e) { }
+      } catch (e) {}
       document.documentElement.setAttribute('data-theme', theme)
+      document.documentElement.classList.add('js')
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'light' ? '#f5f4f0' : '#000000')
     })()
   </script>
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;900&family=Space+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
 
   <link rel="icon" href="/img/favicon.ico" />
 </head>
 
 <body>
   <a href="#main" class="skip-link">Skip to content</a>
-  <div class="noise" aria-hidden="true"></div>
+
+  <canvas class="starfield" aria-hidden="true"></canvas>
+
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-right" viewBox="0 0 256 256"><path fill="currentColor" d="M218.83,130.83l-72,72a4,4,0,0,1-5.66-5.66L206.34,132H40a4,4,0,0,1,0-8H206.34L141.17,58.83a4,4,0,0,1,5.66-5.66l72,72A4,4,0,0,1,218.83,130.83Z" /></symbol>
+    <symbol id="i-sun" viewBox="0 0 256 256"><path fill="currentColor" d="M124,40V16a4,4,0,0,1,8,0V40a4,4,0,0,1-8,0Zm64,88a60,60,0,1,1-60-60A60.07,60.07,0,0,1,188,128Zm-8,0a52,52,0,1,0-52,52A52.06,52.06,0,0,0,180,128ZM61.17,66.83a4,4,0,0,0,5.66-5.66l-16-16a4,4,0,0,0-5.66,5.66Zm0,122.34-16,16a4,4,0,0,0,5.66,5.66l16-16a4,4,0,0,0-5.66-5.66ZM192,68a4,4,0,0,0,2.83-1.17l16-16a4,4,0,1,0-5.66-5.66l-16,16A4,4,0,0,0,192,68Zm2.83,121.17a4,4,0,0,0-5.66,5.66l16,16a4,4,0,0,0,5.66-5.66ZM40,124H16a4,4,0,0,0,0,8H40a4,4,0,0,0,0-8Zm88,88a4,4,0,0,0-4,4v24a4,4,0,0,0,8,0V216A4,4,0,0,0,128,212Zm112-88H216a4,4,0,0,0,0,8h24a4,4,0,0,0,0-8Z" /></symbol>
+    <symbol id="i-moon" viewBox="0 0 256 256"><path fill="currentColor" d="M230.72,145.06a4,4,0,0,0-4-1A92.08,92.08,0,0,1,111.94,29.27a4,4,0,0,0-5-5A100.78,100.78,0,0,0,56.08,59.88a100,100,0,0,0,140,140,100.78,100.78,0,0,0,35.59-50.87A4,4,0,0,0,230.72,145.06ZM191.3,193.53A92,92,0,0,1,62.47,64.7a93,93,0,0,1,39.88-30.35,100.09,100.09,0,0,0,119.3,119.3A93,93,0,0,1,191.3,193.53Z" /></symbol>
+    <symbol id="i-up" viewBox="0 0 256 256"><path fill="currentColor" d="M202.83,114.83a4,4,0,0,1-5.66,0L132,49.66V216a4,4,0,0,1-8,0V49.66L58.83,114.83a4,4,0,0,1-5.66-5.66l72-72a4,4,0,0,1,5.66,0l72,72A4,4,0,0,1,202.83,114.83Z" /></symbol>
+  </svg>
+
+  <div class="ghost-follow" data-pose="about" aria-hidden="true">
+    <svg viewBox="10 34 439 392" focusable="false">
+      <path class="ghost-body" d="M 214.2 41 C 204.3 42, 198.3 43.2, 183 47 C 170.2 50.2, 169.6 50.4, 162.5 53.5 C 159.7 54.8, 155.3 56.5, 152.7 57.4 C 150.1 58.3, 146.3 60, 144.2 61.4 C 142.2 62.7, 138 65, 135 66.5 C 132 68, 127.9 70.6, 126 72.1 C 124.1 73.7, 122.1 75, 121.7 75 C 120.8 75, 105.9 86.2, 101.5 90.2 C 94 96.8, 80.5 110.9, 73.1 119.7 C 70.5 122.8, 60 137.3, 58.5 139.8 C 58 140.8, 56.3 143.4, 54.7 145.8 C 51.9 150, 39.6 173.8, 37.3 179.5 C 36.6 181.2, 35.2 184.5, 34.1 187 C 27.6 201.7, 19.1 236.3, 15.8 261 C 14.2 273.4, 14.2 310.9, 15.9 323 C 19.8 352, 26.9 379.5, 35.7 400.2 L 40.3 410.9 49.6 413.9 C 72.8 421.5, 85.4 417.1, 109 392.9 C 121.5 380.2, 125.7 376.6, 130.2 374.5 C 148.8 366, 163.8 369.7, 180.3 386.8 C 205 412.4, 212.6 417, 230.5 417 C 246.4 417, 256.5 411.8, 271.4 396 C 290.3 376, 293.7 373.6, 306.7 370.9 C 314.4 369.3, 322.3 370.6, 331.3 374.9 C 337.3 377.8, 339.3 379.5, 354.6 396 C 372.5 415.3, 390.5 421.3, 409.5 414.4 C 413.4 413, 417.1 411.8, 417.7 411.8 C 418.4 411.7, 419.6 411, 420.3 410.1 C 422.1 408, 428.7 393.1, 429.5 389.4 C 429.9 387.8, 431.5 382.9, 433.1 378.5 C 436 370.5, 441.6 345.9, 444.1 330 C 445.1 324, 445.5 312.1, 445.4 290 C 445.4 260.1, 445.3 257.8, 442.8 245.5 C 437.7 220.4, 435.8 212.4, 433 205 C 431.5 200.9, 429.9 196.2, 429.5 194.5 C 427.8 187, 410.3 151, 405.1 144.4 C 404 143, 403 141.3, 403 140.9 C 403 139.4, 388.5 120.5, 380 110.8 C 371.1 100.7, 356.2 86.8, 352.2 84.6 C 351.2 84.1, 350 83.2, 349.4 82.4 C 347.9 80.6, 326.2 66, 324.9 66 C 324.4 66, 321.5 64.5, 318.6 62.6 C 315.7 60.8, 312.3 58.9, 310.9 58.5 C 309.6 58.1, 304.4 56, 299.5 54 C 275.8 44, 239 38.4, 214.2 41" />
+      <path class="ghost-line" fill-rule="evenodd" d="M 214.2 41 C 204.3 42, 198.3 43.2, 183 47 C 170.2 50.2, 169.6 50.4, 162.5 53.5 C 159.7 54.8, 155.3 56.5, 152.7 57.4 C 150.1 58.3, 146.3 60, 144.2 61.4 C 142.2 62.7, 138 65, 135 66.5 C 132 68, 127.9 70.6, 126 72.1 C 124.1 73.7, 122.1 75, 121.7 75 C 120.8 75, 105.9 86.2, 101.5 90.2 C 94 96.8, 80.5 110.9, 73.1 119.7 C 70.5 122.8, 60 137.3, 58.5 139.8 C 58 140.8, 56.3 143.4, 54.7 145.8 C 51.9 150, 39.6 173.8, 37.3 179.5 C 36.6 181.2, 35.2 184.5, 34.1 187 C 27.6 201.7, 19.1 236.3, 15.8 261 C 14.2 273.4, 14.2 310.9, 15.9 323 C 19.8 352, 26.9 379.5, 35.7 400.2 L 40.3 410.9 49.6 413.9 C 72.8 421.5, 85.4 417.1, 109 392.9 C 121.5 380.2, 125.7 376.6, 130.2 374.5 C 148.8 366, 163.8 369.7, 180.3 386.8 C 205 412.4, 212.6 417, 230.5 417 C 246.4 417, 256.5 411.8, 271.4 396 C 290.3 376, 293.7 373.6, 306.7 370.9 C 314.4 369.3, 322.3 370.6, 331.3 374.9 C 337.3 377.8, 339.3 379.5, 354.6 396 C 372.5 415.3, 390.5 421.3, 409.5 414.4 C 413.4 413, 417.1 411.8, 417.7 411.8 C 418.4 411.7, 419.6 411, 420.3 410.1 C 422.1 408, 428.7 393.1, 429.5 389.4 C 429.9 387.8, 431.5 382.9, 433.1 378.5 C 436 370.5, 441.6 345.9, 444.1 330 C 445.1 324, 445.5 312.1, 445.4 290 C 445.4 260.1, 445.3 257.8, 442.8 245.5 C 437.7 220.4, 435.8 212.4, 433 205 C 431.5 200.9, 429.9 196.2, 429.5 194.5 C 427.8 187, 410.3 151, 405.1 144.4 C 404 143, 403 141.3, 403 140.9 C 403 139.4, 388.5 120.5, 380 110.8 C 371.1 100.7, 356.2 86.8, 352.2 84.6 C 351.2 84.1, 350 83.2, 349.4 82.4 C 347.9 80.6, 326.2 66, 324.9 66 C 324.4 66, 321.5 64.5, 318.6 62.6 C 315.7 60.8, 312.3 58.9, 310.9 58.5 C 309.6 58.1, 304.4 56, 299.5 54 C 275.8 44, 239 38.4, 214.2 41 M 215 49.7 C 205 50.5, 176.9 57.1, 167.5 60.8 C 155 65.8, 147.4 69.2, 146 70.4 C 145.2 71.2, 141.8 73.1, 138.4 74.8 C 135 76.5, 131 79, 129.4 80.3 C 127.8 81.6, 125.4 83.3, 124.1 84 C 120.6 85.8, 108.6 95.6, 99.5 104.2 C 83.9 118.8, 66.2 141.8, 56.5 160.4 C 54.7 163.8, 52.1 168.6, 50.6 171.2 C 49.2 173.8, 48 176.3, 48 176.9 C 48 177.4, 46.4 181.2, 44.5 185.2 C 36.9 201.4, 30.1 227, 24.9 259.5 C 23.2 269.9, 23.1 312.7, 24.8 323.5 C 29.2 352.5, 35.6 377.8, 43.3 395.7 C 45.7 401.3, 47 403.2, 49.4 404.4 C 59.9 409.2, 71.8 409.2, 82 404.3 C 88.5 401.2, 89.3 400.5, 110.8 378.7 C 118.7 370.6, 121.1 368.8, 127.4 366.2 C 141.3 360.3, 153.1 360, 165.9 365.2 C 174.4 368.6, 179.6 372.8, 192.9 386.9 C 209.6 404.7, 214.8 407.5, 230.5 407.4 C 246.7 407.4, 249 406, 269.9 385.1 C 288.2 366.8, 292.1 364.3, 306.4 362 C 323.1 359.3, 337.4 365.2, 352.4 380.9 C 375.3 404.9, 379.4 407.5, 395 407.5 C 407.6 407.5, 414 404.9, 416.6 398.7 C 425.1 377.6, 432.6 349.2, 436 324 C 437.5 313.1, 437.5 271.1, 436 260 C 430.5 219.1, 415.6 175.9, 397.8 149.4 C 395.2 145.5, 393 141.9, 393 141.6 C 393 141, 390.2 137.3, 377.7 121.7 C 369 110.7, 341.4 85, 338.4 85 C 338 85, 335.4 83.3, 332.6 81.2 C 329.8 79.1, 325 76.1, 322 74.6 C 319 73, 315.8 71.2, 315 70.6 C 313.1 69.1, 309.9 67.6, 303 64.9 C 300 63.8, 297.1 62.5, 296.5 62.1 C 292.6 59.2, 261.8 51.6, 247.8 50.1 C 238.6 49.1, 225.1 48.9, 215 49.7 M 159.5 89.7 C 150.8 91.5, 147.1 93.3, 142.3 98.3 C 130.6 110.5, 127.9 128.1, 135.4 143.3 C 143.4 159.6, 159 166.4, 173.1 159.7 C 180.5 156.2, 189 147.6, 190.2 142.5 L 190.7 140.5 191.5 142.5 C 200.3 162.9, 222.8 169.7, 238.3 156.5 C 251.8 144.9, 255.7 122.6, 246.7 108.3 C 245.4 106.2, 244.1 104, 243.9 103.4 C 242.9 100.7, 232.6 93.1, 228.5 92.1 C 214.2 88.5, 201.6 94.1, 194 107.2 L 191.2 112.2 190.1 108.7 C 186.5 98, 169.7 87.5, 159.5 89.7 M 151.1 97.2 C 126.4 112.3, 134.3 156.7, 161.7 157 C 172.3 157, 179.9 152, 185.2 141.3 C 198.1 115, 173.7 83.3, 151.1 97.2 M 213.4 96.4 C 193.9 102.5, 187.5 134.3, 202.4 150.8 C 214.8 164.6, 237.8 158.5, 244.3 139.7 C 252.6 115.2, 234.5 89.8, 213.4 96.4 M 186.5 180.5 C 185.1 181.8, 184 183.6, 184 184.5 C 184 186.9, 186.6 186.3, 187.8 183.5 C 189.1 180.6, 190.4 180.4, 194.2 182.4 C 197.8 184.3, 198.9 182.6, 195.8 180 C 192.7 177.4, 189.4 177.5, 186.5 180.5" />
+      <path class="ghost-pupil" fill-rule="evenodd" d="M 158 115.1 C 151.8 117.4, 149.4 125.8, 153.1 132 C 155.9 136.6, 156.6 137, 162.3 137 C 169.4 137, 173 133.2, 173 125.8 C 173 117.2, 165.9 112.2, 158 115.1 M 213.3 118.2 C 204.4 124.5, 207.9 136.7, 219 137.8 C 224.8 138.3, 228.1 136.7, 230.6 131.9 C 235.8 121.7, 222.9 111.5, 213.3 118.2" />
+    </svg>
+  </div>
 
   <!-- Navigation -->
   <nav id="site-nav" aria-label="Primary navigation">
@@ -62,16 +78,10 @@
       </ul>
       <div class="nav-tools">
         <button id="theme-toggle" type="button" aria-label="Switch to light theme">
-          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-          </svg>
-          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
-          </svg>
+          <svg class="icon-sun" aria-hidden="true"><use href="#i-sun" /></svg>
+          <svg class="icon-moon" aria-hidden="true"><use href="#i-moon" /></svg>
         </button>
         <button id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links">
-          <span></span>
           <span></span>
           <span></span>
         </button>
@@ -82,40 +92,30 @@
   <main id="main">
     <!-- About -->
     <section id="about">
-      <div class="hero-grid-bg" aria-hidden="true"></div>
-      <canvas class="hero-field" aria-hidden="true"></canvas>
-      <div class="container hero-stage">
-        <div class="hero-content">
-          <p class="hero-label">// PRODUCT ENGINEER</p>
-          <h1 class="hero-title">
-            <span class="hero-first">Sun</span>
-            <span class="hero-last">@asuforce</span>
-          </h1>
-          <p class="hero-handle">Shun NISHITSUJI</p>
+      <div class="container hero">
+        <p class="hero-lead">All those moments will be lost in time<span class="stop">.</span></p>
+        <div class="hero-meta row" data-reveal>
+          <span class="section-num" aria-hidden="true">01</span>
+          <div class="hero-about">
+            <h1 class="hero-title">Sun (@asuforce)</h1>
+            <p class="hero-bio">
+              Specializes in large-scale Kubernetes infrastructure,
+              CI/CD platform engineering, and engineering management.
+            </p>
+          </div>
         </div>
-        <div class="hero-about">
-          <div class="hero-divider"></div>
-          <p class="hero-bio">
-            10+ years in DevOps and SRE. Specializes in large-scale Kubernetes infrastructure,
-            CI/CD platform engineering, and engineering management.
-          </p>
-        </div>
-      </div>
-      <div class="container hero-foot">
-        <a href="#skills" class="scroll-cue">Scroll<span aria-hidden="true"></span></a>
-        <span class="hero-foot-note" aria-hidden="true"><i></i>Syncing<i class="is-synced"></i>Synced — Fig. 01, illustration</span>
       </div>
     </section>
 
     <!-- Skills -->
     <section id="skills">
       <div class="container">
-        <header class="section-header" data-animate>
-          <span class="section-num" aria-hidden="true">01</span>
+        <header class="section-header" data-reveal>
+          <span class="section-num" aria-hidden="true">02</span>
           <h2 class="section-title">SKILLS</h2>
         </header>
-        <div class="skills-grid" data-animate data-animate-delay="1">
-          <div class="skill-category">
+        <div class="skills-grid">
+          <div class="skill-category row" data-reveal>
             <h3 class="skill-category-title">Languages</h3>
             <ul class="skill-list" role="list">
               <li>Go</li>
@@ -124,7 +124,7 @@
               <li>TypeScript</li>
             </ul>
           </div>
-          <div class="skill-category">
+          <div class="skill-category row" data-reveal>
             <h3 class="skill-category-title">Container / Infra</h3>
             <ul class="skill-list" role="list">
               <li>Kubernetes</li>
@@ -132,7 +132,7 @@
               <li>Terraform</li>
             </ul>
           </div>
-          <div class="skill-category">
+          <div class="skill-category row" data-reveal>
             <h3 class="skill-category-title">Observability</h3>
             <ul class="skill-list" role="list">
               <li>Prometheus</li>
@@ -140,7 +140,7 @@
               <li>Fluentd</li>
             </ul>
           </div>
-          <div class="skill-category">
+          <div class="skill-category row" data-reveal>
             <h3 class="skill-category-title">Cloud</h3>
             <ul class="skill-list" role="list">
               <li>AWS</li>
@@ -148,14 +148,14 @@
               <li>Cloudflare</li>
             </ul>
           </div>
-          <div class="skill-category">
+          <div class="skill-category row" data-reveal>
             <h3 class="skill-category-title">CI / CD</h3>
             <ul class="skill-list" role="list">
               <li>GitHub Actions</li>
               <li>ArgoCD</li>
             </ul>
           </div>
-          <div class="skill-category">
+          <div class="skill-category row" data-reveal>
             <h3 class="skill-category-title">Frontend</h3>
             <ul class="skill-list" role="list">
               <li>React</li>
@@ -170,24 +170,28 @@
     <!-- Works -->
     <section id="works">
       <div class="container">
-        <header class="section-header" data-animate>
-          <span class="section-num" aria-hidden="true">02</span>
+        <header class="section-header" data-reveal>
+          <span class="section-num" aria-hidden="true">03</span>
           <h2 class="section-title">WORKS</h2>
         </header>
-        <div class="entries" data-animate data-animate-delay="1">
-          <div class="entry">
+        <div class="entries">
+          <div class="entry row" data-reveal>
             <p class="entry-meta">LY Corporation / Platform</p>
-            <h3 class="entry-title">ArgoCD Platform</h3>
-            <p class="entry-desc">
-              Large-scale CD platform serving 1,800+ users and 10,000+ applications at 99% uptime.
-            </p>
-            <p class="entry-tech">Kubernetes · ArgoCD · Terraform · Prometheus · Go</p>
+            <div class="entry-body">
+              <h3 class="entry-title">ArgoCD Platform</h3>
+              <p class="entry-desc">
+                Large-scale CD platform serving 1,800+ users and 10,000+ applications at 99% uptime.
+              </p>
+              <p class="entry-tech">Kubernetes, ArgoCD, Terraform, Prometheus, Go</p>
+            </div>
           </div>
-          <div class="entry">
+          <div class="entry row" data-reveal>
             <p class="entry-meta">LINE / Tooling</p>
-            <h3 class="entry-title">Distributed Load Testing Tool</h3>
-            <p class="entry-desc">Enabled 10x scale performance testing across multiple services.</p>
-            <p class="entry-tech">Go · Kubernetes · Docker</p>
+            <div class="entry-body">
+              <h3 class="entry-title">Distributed Load Testing Tool</h3>
+              <p class="entry-desc">Enabled 10x scale performance testing across multiple services.</p>
+              <p class="entry-tech">Go, Kubernetes, Docker</p>
+            </div>
           </div>
         </div>
       </div>
@@ -196,46 +200,54 @@
     <!-- Career -->
     <section id="career">
       <div class="container">
-        <header class="section-header" data-animate>
-          <span class="section-num" aria-hidden="true">03</span>
+        <header class="section-header" data-reveal>
+          <span class="section-num" aria-hidden="true">04</span>
           <h2 class="section-title">CAREER</h2>
         </header>
-        <div class="entries" data-animate data-animate-delay="1">
-          <div class="entry is-current">
-            <p class="entry-meta">Mar 2026 – Present</p>
-            <p class="entry-title">Product Engineer</p>
-            <p class="entry-sub">SmartHR, Inc.</p>
+        <div class="entries">
+          <div class="entry row is-current" data-reveal>
+            <p class="entry-meta">Mar 2026 - Present</p>
+            <div class="entry-body">
+              <p class="entry-title">Product Engineer</p>
+              <p class="entry-sub">SmartHR, Inc.</p>
+            </div>
           </div>
-          <div class="entry">
-            <p class="entry-meta">Oct 2023 – Feb 2026</p>
-            <p class="entry-title">DevOps Engineer / EM</p>
-            <p class="entry-sub">LY Corporation</p>
-            <p class="entry-desc">
-              Led the ArgoCD platform team as service owner and engineering manager.
-              Grew the user base from 850, designed DR/BCP systems, introduced horizontal scaling,
-              and built team onboarding processes.
-            </p>
+          <div class="entry row" data-reveal>
+            <p class="entry-meta">Oct 2023 - Feb 2026</p>
+            <div class="entry-body">
+              <p class="entry-title">DevOps Engineer / EM</p>
+              <p class="entry-sub">LY Corporation</p>
+              <p class="entry-desc">
+                Led the ArgoCD platform team as service owner and engineering manager.
+                Grew the user base from 850, designed DR/BCP systems, introduced horizontal scaling,
+                and built team onboarding processes.
+              </p>
+            </div>
           </div>
-          <div class="entry">
-            <p class="entry-meta">Jun 2018 – Sep 2023</p>
-            <p class="entry-title">SRE / EM</p>
-            <p class="entry-sub">LINE Corporation</p>
-            <p class="entry-desc">
-              Managed multi-service infrastructure for LINE Baito and LINE LIVE.
-              Led Kubernetes (VKS) adoption and introduced ArgoCD across the organization
-              (850+ apps, 480+ users).
-              Promoted to engineering manager, reducing inquiry response time by 50%.
-            </p>
+          <div class="entry row" data-reveal>
+            <p class="entry-meta">Jun 2018 - Sep 2023</p>
+            <div class="entry-body">
+              <p class="entry-title">SRE / EM</p>
+              <p class="entry-sub">LINE Corporation</p>
+              <p class="entry-desc">
+                Managed multi-service infrastructure for LINE Baito and LINE LIVE.
+                Led Kubernetes (VKS) adoption and introduced ArgoCD across the organization
+                (850+ apps, 480+ users).
+                Promoted to engineering manager, reducing inquiry response time by 50%.
+              </p>
+            </div>
           </div>
-          <div class="entry">
-            <p class="entry-meta">Apr 2016 – May 2018</p>
-            <p class="entry-title">Infrastructure Engineer</p>
-            <p class="entry-sub">GMO Pepabo, Inc.</p>
-            <p class="entry-desc">
-              Operated large-scale infrastructure for minne (300 servers, millions of users).
-              Led a deploy optimization project that cut deployment time by 50% (50 min → 25 min).
-              Designed and ran a 6-month onboarding program for new graduate engineers.
-            </p>
+          <div class="entry row" data-reveal>
+            <p class="entry-meta">Apr 2016 - May 2018</p>
+            <div class="entry-body">
+              <p class="entry-title">Infrastructure Engineer</p>
+              <p class="entry-sub">GMO Pepabo, Inc.</p>
+              <p class="entry-desc">
+                Operated large-scale infrastructure for minne (300 servers, millions of users).
+                Led a deploy optimization project that cut deployment time by 50% (50 min → 25 min).
+                Designed and ran a 6-month onboarding program for new graduate engineers.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -244,23 +256,23 @@
     <!-- Links -->
     <section id="links">
       <div class="container">
-        <header class="section-header" data-animate>
-          <span class="section-num" aria-hidden="true">04</span>
+        <header class="section-header" data-reveal>
+          <span class="section-num" aria-hidden="true">05</span>
           <h2 class="section-title">CONTACT</h2>
         </header>
-        <ul class="links-list" role="list" data-animate data-animate-delay="1">
-          <li>
+        <ul class="links-list" role="list">
+          <li class="row" data-reveal>
             <a href="https://github.com/Asuforce" class="link-item" target="_blank" rel="noopener noreferrer">
               <span class="link-label">GitHub</span>
               <span class="link-url">github.com/Asuforce</span>
-              <span class="link-arrow" aria-hidden="true">→</span>
+              <svg class="link-arrow" aria-hidden="true"><use href="#i-right" /></svg>
             </a>
           </li>
-          <li>
+          <li class="row" data-reveal>
             <a href="https://x.com/asuforce" class="link-item" target="_blank" rel="noopener noreferrer">
               <span class="link-label">X</span>
               <span class="link-url">x.com/asuforce</span>
-              <span class="link-arrow" aria-hidden="true">→</span>
+              <svg class="link-arrow" aria-hidden="true"><use href="#i-right" /></svg>
             </a>
           </li>
         </ul>
@@ -269,14 +281,26 @@
   </main>
 
   <footer>
+    <div class="moon" aria-hidden="true">
+      <div class="moon-surface"></div>
+      <svg viewBox="0 0 1440 260" preserveAspectRatio="none" focusable="false">
+        <clipPath id="moon-clip" clipPathUnits="objectBoundingBox">
+          <path d="M0 0.2692 Q0.5 0.0769 1 0.2692 V1 H0 Z" />
+        </clipPath>
+        <path class="moon-horizon" d="M0 70 Q720 20 1440 70" />
+      </svg>
+      <span class="moon-mark"></span>
+      <span class="moon-ring"></span>
+    </div>
     <div class="container footer-inner">
       <p class="footer-copy">
         <span class="footer-copy-symbol">©</span> Shun Nishitsuji. All rights reserved.
       </p>
-      <span class="footer-barcode" aria-hidden="true"></span>
-      <a href="#about" class="footer-top">Back to top ↑</a>
+      <a href="#about" class="footer-top">Back to top<svg aria-hidden="true"><use href="#i-up" /></svg></a>
     </div>
   </footer>
+
+  <div id="page-end" aria-hidden="true"></div>
 
   <script type="module" src="/src/main.ts"></script>
 </body>

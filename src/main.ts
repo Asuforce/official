@@ -1,3 +1,5 @@
+import '@fontsource-variable/archivo/wdth.css'
+import '@fontsource/jetbrains-mono/400.css'
 import '../style.css'
 
 type Theme = 'light' | 'dark'
@@ -6,73 +8,83 @@ function initTheme(): void {
   const root = document.documentElement
   const toggle = document.getElementById('theme-toggle')
   const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
-  const systemLight = window.matchMedia('(prefers-color-scheme: light)')
-
-  const readStored = (): Theme | null => {
-    try {
-      const saved = localStorage.getItem('theme')
-      return saved === 'light' || saved === 'dark' ? saved : null
-    } catch {
-      return null
-    }
-  }
 
   const apply = (theme: Theme): void => {
     root.setAttribute('data-theme', theme)
     toggle?.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme')
     meta?.setAttribute('content', getComputedStyle(document.body).backgroundColor)
+    window.dispatchEvent(new Event('themechange'))
   }
 
-  const current = (): Theme => (root.getAttribute('data-theme') === 'light' ? 'light' : 'dark')
-
-  apply(current())
+  apply(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark')
 
   toggle?.addEventListener('click', () => {
-    const next: Theme = current() === 'dark' ? 'light' : 'dark'
+    const next: Theme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
     apply(next)
     try {
       localStorage.setItem('theme', next)
     } catch {
-      // Storage unavailable — the choice just won't persist
+      // Storage can be blocked; the choice then lasts for this visit only.
     }
-  })
-
-  // Follow the OS setting until the visitor picks a theme explicitly
-  systemLight.addEventListener('change', (e) => {
-    if (readStored() === null) apply(e.matches ? 'light' : 'dark')
   })
 }
 
 function initNav(): void {
-  const nav = document.getElementById('site-nav')
   const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-link')
   const sections = document.querySelectorAll<HTMLElement>('section[id]')
+  const pageEnd = document.getElementById('page-end')
+  const lastId = sections[sections.length - 1]?.id
+  let midId = sections[0]?.id
+  let atEnd = false
 
-  if (!nav) return
+  const ghost = document.querySelector<HTMLElement>('.ghost-follow')
+  const moon = document.querySelector<HTMLElement>('.moon')
 
-  // Scrolled state — show background
-  const onScroll = (): void => {
-    nav.classList.toggle('is-scrolled', window.scrollY > 10)
+  const render = (): void => {
+    const activeId = atEnd ? lastId : midId
+    navLinks.forEach((link) => {
+      link.classList.toggle('is-active', link.getAttribute('href') === `#${activeId}`)
+    })
+    if (ghost && activeId) ghost.dataset.pose = atEnd ? 'moon' : activeId
+    moon?.classList.toggle('is-landed', atEnd)
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true })
-  onScroll()
-
-  // Active link — fires when a section crosses the vertical midpoint of the viewport
-  const observer = new IntersectionObserver(
+  // Active link: the section crossing the vertical midpoint of the viewport
+  const mid = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
-        if (!entry.isIntersecting) continue
-        const id = entry.target.id
-        navLinks.forEach((link) => {
-          link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`)
-        })
+        if (entry.isIntersecting) midId = entry.target.id
       }
+      render()
     },
     { rootMargin: '-50% 0px -50% 0px', threshold: 0 },
   )
+  sections.forEach((section) => mid.observe(section))
 
-  sections.forEach((section) => observer.observe(section))
+  // At the very bottom the last section can no longer reach the midpoint; the end of the page coming into view marks it
+  if (pageEnd) {
+    new IntersectionObserver(([entry]) => {
+      atEnd = entry.isIntersecting
+      render()
+    }).observe(pageEnd)
+  }
+}
+
+function initGaze(): void {
+  const ghost = document.querySelector<HTMLElement>('.ghost-follow')
+  if (!ghost || !window.matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)').matches) return
+
+  const reach = 7
+  window.addEventListener('pointermove', (e) => {
+    if (ghost.dataset.pose === 'moon') return
+    const box = ghost.getBoundingClientRect()
+    const dx = e.clientX - (box.left + box.width / 2)
+    const dy = e.clientY - (box.top + box.height / 2)
+    const len = Math.hypot(dx, dy) || 1
+    const pull = Math.min(1, len / 400)
+    ghost.style.setProperty('--gx', String((dx / len) * pull * reach))
+    ghost.style.setProperty('--gy', String((dy / len) * pull * reach))
+  }, { passive: true })
 }
 
 function initMobileMenu(): void {
@@ -115,177 +127,81 @@ function initMobileMenu(): void {
   }, { passive: true })
 }
 
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+function initReveal(): void {
+  const targets = document.querySelectorAll<HTMLElement>('[data-reveal]')
 
-function scramble(el: HTMLElement): void {
-  const final = el.textContent ?? ''
-  el.setAttribute('aria-label', final)
-  const glyphs = '01/<>#_'
-  let frame = 0
-  const timer = window.setInterval(() => {
-    frame++
-    el.textContent = [...final]
-      .map((ch, i) => (i < frame / 2 ? ch : glyphs[Math.floor(Math.random() * glyphs.length)]))
-      .join('')
-    if (frame / 2 >= final.length) {
-      window.clearInterval(timer)
-      el.textContent = final
-    }
-  }, 35)
-}
+  targets.forEach((el) => {
+    const siblings = el.parentElement?.querySelectorAll(':scope > [data-reveal]')
+    el.style.setProperty('--i', String(siblings ? Array.prototype.indexOf.call(siblings, el) : 0))
+  })
 
-function initScrollAnimations(): void {
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue
         entry.target.classList.add('is-visible')
         observer.unobserve(entry.target)
-        const title = entry.target.querySelector<HTMLElement>('.section-title')
-        if (title && !reducedMotion.matches) scramble(title)
       }
     },
     { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
   )
 
-  document.querySelectorAll('[data-animate]').forEach((el) => observer.observe(el))
+  targets.forEach((el) => observer.observe(el))
 }
 
-function initField(): void {
-  const hero = document.getElementById('about')
-  const canvas = document.querySelector<HTMLCanvasElement>('.hero-field')
+function initStars(): void {
+  const canvas = document.querySelector<HTMLCanvasElement>('.starfield')
   const ctx = canvas?.getContext('2d')
-  if (!hero || !canvas || !ctx) return
+  if (!canvas || !ctx) return
 
-  const STEP = 16
-  const REACH = 120
-  const pulses: { x: number; y: number; v: number }[] = []
-  const base = document.createElement('canvas')
-  let width = 0
-  let height = 0
-  let pointer: { x: number; y: number } | null = null
-  let frameId = 0
-
-  let accent = '240, 192, 48'
-  let baseColor = 'rgba(70, 120, 235, 0.42)'
-
-  // Canvas can't use CSS variables directly, so pull the active theme's values
-  const readColors = (): void => {
-    const style = getComputedStyle(document.documentElement)
-    accent = style.getPropertyValue('--field-accent').trim() || accent
-    const base = style.getPropertyValue('--field-base').trim()
-    const alpha = style.getPropertyValue('--field-base-a').trim()
-    if (base && alpha) baseColor = `rgba(${base}, ${alpha})`
+  // Fixed seed and normalized coordinates keep the sky identical across loads and resizes
+  let seed = 0x9e3779b9
+  const random = (): number => {
+    seed = (seed + 0x6d2b79f5) | 0
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
   }
 
-  const dot = (x: number, y: number, v: number): void => {
-    ctx.fillStyle = `rgba(${accent}, ${v})`
-    const size = 2 + v * 2.5
-    ctx.fillRect(x - size / 2, y - size / 2, size, size)
-  }
-
-  const spawn = (): void => {
-    const x = Math.floor((Math.random() * width) / STEP) * STEP + STEP / 2
-    const y = Math.floor((Math.random() * height) / STEP) * STEP + STEP / 2
-    pulses.push({ x, y, v: 1 })
-  }
-
-  const draw = (): void => {
-    ctx.clearRect(0, 0, width, height)
-    ctx.drawImage(base, 0, 0, width, height)
-    for (const p of pulses) dot(p.x, p.y, p.v)
-    if (!pointer) return
-    ctx.strokeStyle = `rgba(${accent}, 0.7)`
-    ctx.beginPath()
-    ctx.moveTo(pointer.x - 10, pointer.y)
-    ctx.lineTo(pointer.x + 10, pointer.y)
-    ctx.moveTo(pointer.x, pointer.y - 10)
-    ctx.lineTo(pointer.x, pointer.y + 10)
-    ctx.stroke()
-    ctx.font = '11px "JetBrains Mono", monospace'
-    ctx.fillStyle = `rgba(${accent}, 0.9)`
-    const pad = (n: number): string => String(Math.round(n)).padStart(4, '0')
-    ctx.fillText(`X${pad(pointer.x)} Y${pad(pointer.y)}`, pointer.x + 16, pointer.y - 12)
-    const x0 = Math.floor((pointer.x - REACH) / STEP)
-    const x1 = Math.ceil((pointer.x + REACH) / STEP)
-    const y0 = Math.floor((pointer.y - REACH) / STEP)
-    const y1 = Math.ceil((pointer.y + REACH) / STEP)
-    for (let cy = y0; cy <= y1; cy++) {
-      for (let cx = x0; cx <= x1; cx++) {
-        const x = cx * STEP + STEP / 2
-        const y = cy * STEP + STEP / 2
-        const near = 1 - Math.hypot(x - pointer.x, y - pointer.y) / REACH
-        if (near > 0) dot(x, y, near)
-      }
+  const stars = Array.from({ length: 190 }, () => {
+    const bright = random() < 0.1
+    return {
+      x: random(),
+      y: random(),
+      r: bright ? 0.9 + random() * 0.4 : 0.45 + random() * 0.35,
+      a: bright ? 0.6 + random() * 0.3 : 0.22 + random() * 0.28,
     }
-  }
-
-  const step = (): void => {
-    const births = Math.max(1, Math.round((width * height) / (STEP * STEP * 900)))
-    for (let i = 0; i < births; i++) spawn()
-    for (let i = pulses.length - 1; i >= 0; i--) {
-      pulses[i].v *= 0.972
-      if (pulses[i].v < 0.05) pulses.splice(i, 1)
-    }
-    draw()
-    frameId = requestAnimationFrame(step)
-  }
-
-  const resize = (): void => {
-    readColors()
-    const dpr = Math.min(window.devicePixelRatio || 1, 2)
-    const rect = hero.getBoundingClientRect()
-    width = rect.width
-    height = rect.height
-    canvas.width = width * dpr
-    canvas.height = height * dpr
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-
-    base.width = canvas.width
-    base.height = canvas.height
-    const baseCtx = base.getContext('2d')
-    if (!baseCtx) return
-    baseCtx.scale(dpr, dpr)
-    baseCtx.fillStyle = baseColor
-    for (let y = STEP / 2; y < height; y += STEP) {
-      for (let x = STEP / 2; x < width; x += STEP) baseCtx.fillRect(x - 1, y - 1, 2, 2)
-    }
-    pulses.length = 0
-    if (reducedMotion.matches) {
-      for (let i = 0; i < 160; i++) {
-        spawn()
-        pulses[i].v = 0.2 + Math.random() * 0.6
-      }
-    }
-    draw()
-  }
-
-  new ResizeObserver(resize).observe(hero)
-
-  // Re-render the dot grid when the theme switches
-  new MutationObserver(resize).observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['data-theme'],
   })
 
-  if (reducedMotion.matches) return
+  const draw = (): void => {
+    const rgb = getComputedStyle(document.documentElement).getPropertyValue('--star').trim().replace(/\s+/g, ', ')
+    const gain = Number(getComputedStyle(document.documentElement).getPropertyValue('--star-a')) || 1
+    const dpr = window.devicePixelRatio || 1
+    const { innerWidth: w, innerHeight: h } = window
+    canvas.width = Math.round(w * dpr)
+    canvas.height = Math.round(h * dpr)
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    ctx.clearRect(0, 0, w, h)
+    for (const s of stars) {
+      ctx.fillStyle = `rgba(${rgb}, ${s.a * gain})`
+      ctx.beginPath()
+      ctx.arc(s.x * w, s.y * h, s.r, 0, Math.PI * 2)
+      ctx.fill()
+    }
+  }
 
-  hero.addEventListener('pointermove', (e) => {
-    const rect = hero.getBoundingClientRect()
-    pointer = { x: e.clientX - rect.left, y: e.clientY - rect.top }
+  let frame = 0
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(frame)
+    frame = requestAnimationFrame(draw)
   }, { passive: true })
-  hero.addEventListener('pointerleave', () => { pointer = null })
-
-  new IntersectionObserver(([entry]) => {
-    cancelAnimationFrame(frameId)
-    if (entry.isIntersecting) frameId = requestAnimationFrame(step)
-  }).observe(hero)
+  window.addEventListener('themechange', draw)
+  draw()
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  initTheme()
-  initNav()
-  initMobileMenu()
-  initScrollAnimations()
-  initField()
-})
+initTheme()
+initNav()
+initMobileMenu()
+initReveal()
+initStars()
+initGaze()
