@@ -1,5 +1,7 @@
 # DESIGN
 
+色、フォント、レイアウトの共通トークンは tintwork (github.com/Asuforce/tintwork) にあり、この文書が正で、tintwork はその写し。ゴースト、月面、星などサイト固有の変数は `style.css` に残す。
+
 ポートフォリオ向け。ダークを基本に、ライトを切り替えで持つ。黒とグレーの地に、ネオン1色だけを差す。見出しは大文字、太めの DIN 系 (SpaceX 型)。角は丸めず、影も使わない。
 
 実測は 2026-10-08 に各サイトの computed style を取得した値。「推定」「選定」は画像や好みから決めた値で、未計測。
@@ -38,9 +40,9 @@
 
 ## 文字
 
-見出しは D-DIN (太さ 700、大文字、字間 0.02em)。SpaceX のサイトの見出し (D-DIN-Bold、大文字、48〜80px、字間 約 0.02em) を実測して合わせた。本文は Archivo Variable (選定、自己ホスト、幅 100%・太さ 400)。
+見出しは D-DIN (太さ 700、大文字、字間 0.02em)。SpaceX のサイトの見出し (D-DIN-Bold、大文字、48〜80px、字間 約 0.02em) を実測して合わせた。本文は Archivo (選定、自己ホスト、太さ 300 と 400)。
 
-D-DIN は Datto Inc. 製で、SIL Open Font License 1.1 (予約フォント名 "D-DIN")。ファイルは Datto の公式配布 (github.com/amcchord/datto-d-din) の `D-DIN-Bold.woff2` を無加工で `public/fonts/d-din/` に置き、`OFL-1.1.txt` と `FONTLOG.txt` を同じ場所に添えて配信する (`/fonts/d-din/`)。条件: 形式変換、軽量化、名前の変更などの改変をしない (改変すると予約フォント名を使えない)、フォント単体で販売しない、Datto の名前を宣伝に使わない。差し替えるときは公式の無加工ファイルを使う。番号と日付だけ JetBrains Mono 400。日本語フォントは指定しない (英語表記)。サイズと行間は rem で指定する (1rem = 16px)。下の表は 16px 基準の px で書く。
+D-DIN は Datto Inc. 製で、SIL Open Font License 1.1 (予約フォント名 "D-DIN")。ファイルは Datto の公式配布 (github.com/amcchord/datto-d-din) の `D-DIN-Bold.woff2` を無加工で使う。フォントは共有 CSS の tintwork (github.com/Asuforce/tintwork) が持ち、`@asuforce/tintwork/fonts.css` から読み込む。`OFL-1.1.txt` と `FONTLOG.txt` は `public/fonts/d-din/` に置いて配信する (`/fonts/d-din/`)。条件: 形式変換、軽量化、名前の変更などの改変をしない (改変すると予約フォント名を使えない)、フォント単体で販売しない、Datto の名前を宣伝に使わない。差し替えるときは公式の無加工ファイルを使う。番号と日付だけ JetBrains Mono 400。日本語フォントは指定しない (英語表記)。サイズと行間は rem で指定する (1rem = 16px)。下の表は 16px 基準の px で書く。
 
 | 用途 | サイズ / 行間 | 太さ | 字間 | 根拠 |
 |---|---|---|---|---|
@@ -77,7 +79,7 @@ D-DIN は Datto Inc. 製で、SIL Open Font License 1.1 (予約フォント名 "
 
 ## 共有カード
 
-`public/img/og.png` (1200x1200 の正方形、`og:image` と `twitter:image`、`twitter:card` は `summary`)。正方形にした理由は、Slack や LINE などが小さな正方形に中央で切り抜いて見せるため。横長 (1200x630) だと文字が欠けた。X の大きなカード (`summary_large_image`) は使えなくなる。ダークの世界をそのまま切り出す。黒の地に星 (サイトと同じ固定の乱数)、上寄りに `ASUFORCE.COM` だけを D-DIN 154px、大文字で置き、ドメインのドットだけアクセント、下に月面 (`moon.jpg` を円弧で切り抜き、上端に 1px の白い線)、右寄りの水平線にゴーストが着地して影を落とす。文字はこの 1 つだけで、ラベルや装飾は置かない。ライトは作らない (クローラーはテーマを選べない)。ヘッドレスの Chromium で HTML を 1200x630 に撮影して作る。HTML の原稿はリポジトリに残していない。作り直すときは、この記述と `public/fonts/d-din/`、`public/img/moon.jpg`、`index.html` のゴーストのパスから組む。
+`public/img/og.png` (1200x1200 の正方形、`og:image` と `twitter:image`、`twitter:card` は `summary`)。正方形にした理由は、Slack や LINE などが小さな正方形に中央で切り抜いて見せるため。横長 (1200x630) だと文字が欠けた。X の大きなカード (`summary_large_image`) は使えなくなる。ダークの世界をそのまま切り出す。黒の地に星 (サイトと同じ固定の乱数)、上寄りに `ASUFORCE.COM` だけを D-DIN 154px、大文字で置き、ドメインのドットだけアクセント、下に月面 (`moon.jpg` を円弧で切り抜き、上端に 1px の白い線)、右寄りの水平線にゴーストが着地して影を落とす。文字はこの 1 つだけで、ラベルや装飾は置かない。ライトは作らない (クローラーはテーマを選べない)。ヘッドレスの Chromium で HTML を 1200x630 に撮影して作る。HTML の原稿はリポジトリに残していない。作り直すときは、この記述と tintwork の `fonts/d-din/`、`public/img/moon.jpg`、`index.html` のゴーストのパスから組む。
 
 ## ゴースト (追従する要素)
 
