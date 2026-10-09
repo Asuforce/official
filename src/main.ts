@@ -13,12 +13,19 @@ function initTheme(): void {
     root.setAttribute('data-theme', theme)
     toggle?.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme')
     meta?.setAttribute('content', getComputedStyle(document.body).backgroundColor)
+    window.dispatchEvent(new Event('themechange'))
   }
 
-  apply('dark')
+  apply(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark')
 
   toggle?.addEventListener('click', () => {
-    apply(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark')
+    const next: Theme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+    apply(next)
+    try {
+      localStorage.setItem('theme', next)
+    } catch {
+      // Storage can be blocked; the choice then lasts for this visit only.
+    }
   })
 }
 
@@ -42,7 +49,7 @@ function initNav(): void {
     moon?.classList.toggle('is-landed', atEnd)
   }
 
-  // Active link — the section crossing the vertical midpoint of the viewport
+  // Active link: the section crossing the vertical midpoint of the viewport
   const mid = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
@@ -167,6 +174,8 @@ function initStars(): void {
   })
 
   const draw = (): void => {
+    const rgb = getComputedStyle(document.documentElement).getPropertyValue('--star').trim().replace(/\s+/g, ', ')
+    const gain = Number(getComputedStyle(document.documentElement).getPropertyValue('--star-a')) || 1
     const dpr = window.devicePixelRatio || 1
     const { innerWidth: w, innerHeight: h } = window
     canvas.width = Math.round(w * dpr)
@@ -174,7 +183,7 @@ function initStars(): void {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     ctx.clearRect(0, 0, w, h)
     for (const s of stars) {
-      ctx.fillStyle = `rgba(255, 255, 255, ${s.a})`
+      ctx.fillStyle = `rgba(${rgb}, ${s.a * gain})`
       ctx.beginPath()
       ctx.arc(s.x * w, s.y * h, s.r, 0, Math.PI * 2)
       ctx.fill()
@@ -186,6 +195,7 @@ function initStars(): void {
     cancelAnimationFrame(frame)
     frame = requestAnimationFrame(draw)
   }, { passive: true })
+  window.addEventListener('themechange', draw)
   draw()
 }
 

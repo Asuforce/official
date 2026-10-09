@@ -18,6 +18,14 @@
   --muted:     #8a8a8a;
   --accent:    #c0fe04;
   --on-accent: #000000;
+  --accent-text: #c0fe04;
+  --focus:     #c0fe04;
+  --thumb:     #c0fe04;
+  --dot-edge:  #c0fe04;
+  --star:      255 255 255;
+  --star-a:    1;
+  --ghost-body: #ffffff;
+  --ghost-line: #000000;
 
   --font:      'Archivo Variable', system-ui, sans-serif;
   --display:   'D-DIN', 'Archivo Variable', system-ui, sans-serif;
@@ -38,6 +46,34 @@
   color-scheme: dark;
 }
 
+:root[data-theme="light"] {
+  --bg:        #f5f4f0;
+  --moon-line: rgba(255, 255, 255, 0.5);
+  --rule:      rgba(0, 0, 0, 0.2);
+  --text:      #111111;
+  --text-soft: #444444;
+  --muted:     #6b6b6b;
+  --accent-text: #4a6800;
+  --focus:     #111111;
+  --thumb:     #111111;
+  --dot-edge:  #111111;
+  --star:      0 0 0;
+  --star-a:    0.55;
+
+  color-scheme: light;
+}
+
+/* The moon band stays dark in both themes. */
+:root[data-theme="light"] footer {
+  --bg:        #000000;
+  --rule:      rgba(255, 255, 255, 0.2);
+  --text:      #ffffff;
+  --text-soft: #c8c8c8;
+  --muted:     #8a8a8a;
+  --accent-text: #c0fe04;
+  --focus:     #c0fe04;
+}
+
 /* ===================================================================
    Base
    =================================================================== */
@@ -47,7 +83,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--nav-h);
   overflow-x: clip;
-  scrollbar-color: var(--accent) var(--bg);
+  scrollbar-color: var(--thumb) var(--bg);
   scrollbar-width: thin;
   -webkit-text-size-adjust: 100%;
 }
@@ -71,7 +107,7 @@ a { color: inherit; text-decoration: none; }
 ::selection { background: var(--accent); color: var(--on-accent); }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus);
   outline-offset: 4px;
 }
 
@@ -134,8 +170,8 @@ a { color: inherit; text-decoration: none; }
   transition: color 150ms var(--ease);
 }
 .nav-link:hover { text-decoration: underline; text-decoration-thickness: 1px; }
-.nav-link.is-active { color: var(--accent); }
-.nav-logo:active, .nav-link:active, #menu-toggle:active, .footer-top:active { color: var(--accent); }
+.nav-link.is-active { color: var(--accent-text); }
+.nav-logo:active, .nav-link:active, #menu-toggle:active, #theme-toggle:active, .footer-top:active { color: var(--accent-text); }
 
 .nav-tools { display: flex; align-items: center; }
 
@@ -163,6 +199,25 @@ a { color: inherit; text-decoration: none; }
 #menu-toggle span:last-child { top: 26px; }
 #menu-toggle[aria-expanded="true"] span:first-child { top: 22px; transform: rotate(45deg); }
 #menu-toggle[aria-expanded="true"] span:last-child { top: 22px; transform: rotate(-45deg); }
+
+#theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-right: 8px;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  transition: color 150ms var(--ease);
+}
+#theme-toggle svg { width: 24px; height: 24px; }
+#theme-toggle:hover { color: var(--accent-text); }
+:root[data-theme="dark"] .icon-moon,
+:root[data-theme="light"] .icon-sun { display: none; }
 
 /* ===================================================================
    Sections, rows, rules
@@ -268,8 +323,8 @@ section { padding-top: clamp(96px, 12vw, 160px); }
   will-change: transform, opacity;
 }
 .ghost-follow svg { display: block; width: 100%; height: auto; }
-.ghost-body { fill: var(--text); }
-.ghost-line, .ghost-pupil { fill: var(--bg); }
+.ghost-body { fill: var(--ghost-body); }
+.ghost-line, .ghost-pupil { fill: var(--ghost-line); }
 .ghost-pupil {
   transform: translate(calc((var(--px) + var(--gx, 0)) * 1px), calc((var(--py) + var(--gy, 0)) * 1px));
   transition: transform 350ms var(--ease);
@@ -318,7 +373,7 @@ main, footer { position: relative; z-index: 2; }
   text-wrap: balance;
 }
 
-.hero-lead .stop { color: var(--accent); }
+.hero-lead .stop { color: var(--accent-text); }
 
 .hero-title {
   font-size: clamp(1.5rem, 2.6vw, 2.25rem);
@@ -342,7 +397,7 @@ main, footer { position: relative; z-index: 2; }
   transition: color 150ms var(--ease);
 }
 .footer-top svg, .link-arrow { width: 16px; height: 16px; flex: none; }
-.footer-top:hover { color: var(--accent); }
+.footer-top:hover { color: var(--accent-text); }
 
 /* ===================================================================
    Skills
@@ -382,6 +437,7 @@ main, footer { position: relative; z-index: 2; }
   height: 8px;
   margin-right: 10px;
   background: var(--accent);
+  border: 1px solid var(--dot-edge);
 }
 
 .entry-title {
@@ -424,11 +480,11 @@ main, footer { position: relative; z-index: 2; }
 .link-item:hover, .link-item:focus-visible { background: var(--accent); color: var(--on-accent); }
 .link-item:hover .link-url, .link-item:focus-visible .link-url { color: var(--on-accent); }
 .link-item:hover .link-arrow, .link-item:focus-visible .link-arrow { transform: translateX(6px); }
-.link-item:active { background: var(--text); color: var(--on-accent); }
-.link-item:active .link-url { color: var(--on-accent); }
+.link-item:active { background: var(--text); color: var(--bg); }
+.link-item:active .link-url { color: var(--bg); }
 .link-item:focus-visible { outline-offset: -4px; outline-color: var(--on-accent); }
 
-footer { margin-top: calc(var(--gw) * var(--land-s) * 0.893 + 32px); }
+footer { margin-top: calc(var(--gw) * var(--land-s) * 0.893 + 32px); color: var(--text); }
 
 .moon { position: relative; height: var(--moon-h); }
 .moon-surface {

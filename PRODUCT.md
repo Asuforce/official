@@ -31,7 +31,7 @@ Shun Nishitsuji (@asuforce) の個人サイト (asuforce.com)。Software Enginee
 ## Capabilities and Constraints
 
 - 掲載内容は About、Skills、Works (2 件: ArgoCD Platform、Distributed Load Testing Tool)、Career、Contact。リニューアルでも文面と事実は変えない。
-- ライト / ダークのテーマ切り替えは維持する。保存した設定、なければ OS 設定に従う。リニューアルのデザインはまずダークだけを作り込み、ライト側の設計は後回し (未決定)。
+- ライト / ダークのテーマ切り替えは維持する。保存した設定、なければ OS 設定に従う。ライト側の配色は DESIGN.md に定義済み (月面とフッターは両テーマで暗いまま)。
 - 表記は英語のまま。日本語は追加しない。
 - 肩書きは「Software Engineer」に揃える。`index.html` の `description` と `og:description` は、まだ「DevOps / SRE Engineer」のまま。
 

@@ -29,8 +29,17 @@
   <meta property="twitter:image:alt" content="Sun (@asuforce), Software Engineer, with a white ghost on a black background" />
 
   <script>
-    document.documentElement.setAttribute('data-theme', 'dark')
-    document.documentElement.classList.add('js')
+    (function () {
+      var theme = 'dark'
+      try {
+        var saved = localStorage.getItem('theme')
+        if (saved === 'light' || saved === 'dark') theme = saved
+        else if (window.matchMedia('(prefers-color-scheme: light)').matches) theme = 'light'
+      } catch (e) {}
+      document.documentElement.setAttribute('data-theme', theme)
+      document.documentElement.classList.add('js')
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'light' ? '#f5f4f0' : '#000000')
+    })()
   </script>
 
   <link rel="icon" href="/img/favicon.ico" />
@@ -43,6 +52,8 @@
 
   <svg class="sprite" aria-hidden="true" focusable="false">
     <symbol id="i-right" viewBox="0 0 256 256"><path fill="currentColor" d="M218.83,130.83l-72,72a4,4,0,0,1-5.66-5.66L206.34,132H40a4,4,0,0,1,0-8H206.34L141.17,58.83a4,4,0,0,1,5.66-5.66l72,72A4,4,0,0,1,218.83,130.83Z" /></symbol>
+    <symbol id="i-sun" viewBox="0 0 256 256"><path fill="currentColor" d="M124,40V16a4,4,0,0,1,8,0V40a4,4,0,0,1-8,0Zm64,88a60,60,0,1,1-60-60A60.07,60.07,0,0,1,188,128Zm-8,0a52,52,0,1,0-52,52A52.06,52.06,0,0,0,180,128ZM61.17,66.83a4,4,0,0,0,5.66-5.66l-16-16a4,4,0,0,0-5.66,5.66Zm0,122.34-16,16a4,4,0,0,0,5.66,5.66l16-16a4,4,0,0,0-5.66-5.66ZM192,68a4,4,0,0,0,2.83-1.17l16-16a4,4,0,1,0-5.66-5.66l-16,16A4,4,0,0,0,192,68Zm2.83,121.17a4,4,0,0,0-5.66,5.66l16,16a4,4,0,0,0,5.66-5.66ZM40,124H16a4,4,0,0,0,0,8H40a4,4,0,0,0,0-8Zm88,88a4,4,0,0,0-4,4v24a4,4,0,0,0,8,0V216A4,4,0,0,0,128,212Zm112-88H216a4,4,0,0,0,0,8h24a4,4,0,0,0,0-8Z" /></symbol>
+    <symbol id="i-moon" viewBox="0 0 256 256"><path fill="currentColor" d="M230.72,145.06a4,4,0,0,0-4-1A92.08,92.08,0,0,1,111.94,29.27a4,4,0,0,0-5-5A100.78,100.78,0,0,0,56.08,59.88a100,100,0,0,0,140,140,100.78,100.78,0,0,0,35.59-50.87A4,4,0,0,0,230.72,145.06ZM191.3,193.53A92,92,0,0,1,62.47,64.7a93,93,0,0,1,39.88-30.35,100.09,100.09,0,0,0,119.3,119.3A93,93,0,0,1,191.3,193.53Z" /></symbol>
     <symbol id="i-up" viewBox="0 0 256 256"><path fill="currentColor" d="M202.83,114.83a4,4,0,0,1-5.66,0L132,49.66V216a4,4,0,0,1-8,0V49.66L58.83,114.83a4,4,0,0,1-5.66-5.66l72-72a4,4,0,0,1,5.66,0l72,72A4,4,0,0,1,202.83,114.83Z" /></symbol>
   </svg>
 
@@ -66,14 +77,9 @@
         <li><a href="#links" class="nav-link">Contact</a></li>
       </ul>
       <div class="nav-tools">
-        <button id="theme-toggle" type="button" aria-label="Switch to light theme" hidden>
-          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-          </svg>
-          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
-          </svg>
+        <button id="theme-toggle" type="button" aria-label="Switch to light theme">
+          <svg class="icon-sun" aria-hidden="true"><use href="#i-sun" /></svg>
+          <svg class="icon-moon" aria-hidden="true"><use href="#i-moon" /></svg>
         </button>
         <button id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links">
           <span></span>
