@@ -1,5 +1,6 @@
-import '@fontsource-variable/archivo/wdth.css'
-import '@fontsource/jetbrains-mono/400.css'
+import '@asuforce/tintwork/fonts.css'
+import '@asuforce/tintwork/tokens.css'
+import '@asuforce/tintwork/base.css'
 import '../style.css'
 
 type Theme = 'light' | 'dark'
