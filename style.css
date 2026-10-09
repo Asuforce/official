@@ -24,7 +24,7 @@
   --mono:      'JetBrains Mono', ui-monospace, monospace;
 
   --nav-h:     56px;
-  --gw:        clamp(168px, 18vw, 260px);
+  --gw:        clamp(96px, min(18vw, (100dvh - 410px) / 1.34), 260px);
   --moon-h:    260px;
   --bar-h:     128px;
   --land-x:    72vw;
