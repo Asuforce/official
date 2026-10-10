@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "check:copy": "node scripts/check-copy.mjs",
+    "build": "tsc && npm run check:copy && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {

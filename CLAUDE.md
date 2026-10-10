@@ -4,9 +4,10 @@
 
 ## ルール
 
-- ページを 1 つ仕上げるたびに、`design-taste-frontend` スキルを実行し、pre-flight チェックを通す。
+- ページを 1 つ仕上げるたびに、`npm run build` を通し、`docs/preflight.md` の判断項目を確認する。
 - そのあと `/impeccable polish` を実行する。
 - どちらも通してから次のページに進む。
+- `design-taste-frontend` の全文は、新しいセクションや部品を足すときだけ読む。
 
 ## リニューアル前のアーカイブ
 
