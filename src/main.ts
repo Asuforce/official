@@ -2,6 +2,7 @@ import '@asuforce/tintwork/fonts.css'
 import '@asuforce/tintwork/tokens.css'
 import '@asuforce/tintwork/base.css'
 import '../style.css'
+import '@asuforce/tintwork/components/navigation.css'
 
 type Theme = 'light' | 'dark'
 
@@ -17,7 +18,12 @@ function initTheme(): void {
     window.dispatchEvent(new Event('themechange'))
   }
 
-  apply(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark')
+  let initial: Theme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+  try {
+    const saved = localStorage.getItem('theme')
+    if (saved === 'light' || saved === 'dark') initial = saved
+  } catch { /* Use the OS preference when storage is unavailable. */ }
+  apply(initial)
 
   toggle?.addEventListener('click', () => {
     const next: Theme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
@@ -44,7 +50,10 @@ function initNav(): void {
   const render = (): void => {
     const activeId = atEnd ? lastId : midId
     navLinks.forEach((link) => {
-      link.classList.toggle('is-active', link.getAttribute('href') === `#${activeId}`)
+      const current = link.getAttribute('href') === `#${activeId}`
+      link.classList.toggle('is-active', current)
+      if (current) link.setAttribute('aria-current', 'location')
+      else link.removeAttribute('aria-current')
     })
     if (ghost && activeId) ghost.dataset.pose = atEnd ? 'moon' : activeId
     moon?.classList.toggle('is-landed', atEnd)
@@ -61,6 +70,16 @@ function initNav(): void {
     { rootMargin: '-50% 0px -50% 0px', threshold: 0 },
   )
   sections.forEach((section) => mid.observe(section))
+  const syncScroll = (): void => {
+    atEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 3
+    for (const section of Array.from(sections)) {
+      if (section.getBoundingClientRect().top <= window.innerHeight * 0.5) midId = section.id
+    }
+    render()
+  }
+  window.addEventListener('scroll', syncScroll, { passive: true })
+  syncScroll()
+
 
   // At the very bottom the last section can no longer reach the midpoint; the end of the page coming into view marks it
   if (pageEnd) {
