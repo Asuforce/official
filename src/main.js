@@ -13,14 +13,7 @@ function initTheme() {
         meta?.setAttribute('content', getComputedStyle(document.body).backgroundColor);
         window.dispatchEvent(new Event('themechange'));
     };
-    let initial = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-    try {
-        const saved = localStorage.getItem('theme');
-        if (saved === 'light' || saved === 'dark')
-            initial = saved;
-    }
-    catch { /* Use the OS preference when storage is unavailable. */ }
-    apply(initial);
+    apply(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
     toggle?.addEventListener('click', () => {
         const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
         apply(next);
