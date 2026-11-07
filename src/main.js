@@ -1,6 +1,8 @@
-import '@fontsource-variable/archivo/wdth.css';
-import '@fontsource/jetbrains-mono/400.css';
+import '@asuforce/tintwork/fonts.css';
+import '@asuforce/tintwork/tokens.css';
+import '@asuforce/tintwork/base.css';
 import '../style.css';
+import '@asuforce/tintwork/components/navigation.css';
 function initTheme() {
     const root = document.documentElement;
     const toggle = document.getElementById('theme-toggle');
@@ -35,7 +37,12 @@ function initNav() {
     const render = () => {
         const activeId = atEnd ? lastId : midId;
         navLinks.forEach((link) => {
-            link.classList.toggle('is-active', link.getAttribute('href') === `#${activeId}`);
+            const current = link.getAttribute('href') === `#${activeId}`;
+            link.classList.toggle('is-active', current);
+            if (current)
+                link.setAttribute('aria-current', 'location');
+            else
+                link.removeAttribute('aria-current');
         });
         if (ghost && activeId)
             ghost.dataset.pose = atEnd ? 'moon' : activeId;
@@ -50,6 +57,16 @@ function initNav() {
         render();
     }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
     sections.forEach((section) => mid.observe(section));
+    const syncScroll = () => {
+        atEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 3;
+        for (const section of Array.from(sections)) {
+            if (section.getBoundingClientRect().top <= window.innerHeight * 0.5)
+                midId = section.id;
+        }
+        render();
+    };
+    window.addEventListener('scroll', syncScroll, { passive: true });
+    syncScroll();
     // At the very bottom the last section can no longer reach the midpoint; the end of the page coming into view marks it
     if (pageEnd) {
         new IntersectionObserver(([entry]) => {

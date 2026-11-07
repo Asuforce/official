@@ -1,7 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
+  <script>
+    (() => {
+      let theme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      try {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'light' || saved === 'dark') theme = saved;
+      } catch {}
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -28,19 +38,7 @@
   <meta property="twitter:image" content="https://asuforce.com/img/og.png" />
   <meta property="twitter:image:alt" content="Asuforce.com, with a white ghost standing on the moon under a starry sky" />
 
-  <script>
-    (function () {
-      var theme = 'dark'
-      try {
-        var saved = localStorage.getItem('theme')
-        if (saved === 'light' || saved === 'dark') theme = saved
-        else if (window.matchMedia('(prefers-color-scheme: light)').matches) theme = 'light'
-      } catch (e) {}
-      document.documentElement.setAttribute('data-theme', theme)
-      document.documentElement.classList.add('js')
-      document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'light' ? '#f5f4f0' : '#000000')
-    })()
-  </script>
+
 
   <link rel="icon" href="/img/favicon.ico" />
 </head>
@@ -66,15 +64,15 @@
   </div>
 
   <!-- Navigation -->
-  <nav id="site-nav" aria-label="Primary navigation">
+  <nav class="tw-nav tw-nav--clear" id="site-nav" aria-label="Primary navigation">
     <div class="nav-inner">
       <a href="#about" class="nav-logo" aria-label="Home">Asuforce.com</a>
-      <ul id="nav-links" role="list">
-        <li><a href="#about" class="nav-link">About</a></li>
-        <li><a href="#skills" class="nav-link">Skills</a></li>
-        <li><a href="#works" class="nav-link">Works</a></li>
-        <li><a href="#career" class="nav-link">Career</a></li>
-        <li><a href="#links" class="nav-link">Contact</a></li>
+      <ul class="tw-nav__items" id="nav-links" role="list">
+        <li><a href="#about" class="nav-link tw-nav__link">About</a></li>
+        <li><a href="#skills" class="nav-link tw-nav__link">Skills</a></li>
+        <li><a href="#works" class="nav-link tw-nav__link">Works</a></li>
+        <li><a href="#career" class="nav-link tw-nav__link">Career</a></li>
+        <li><a href="#links" class="nav-link tw-nav__link">Contact</a></li>
       </ul>
       <div class="nav-tools">
         <button id="theme-toggle" type="button" aria-label="Switch to light theme">
@@ -309,7 +307,8 @@
 
   <div id="page-end" aria-hidden="true"></div>
 
-  <script type="module" src="/src/main.ts"></script>
+
+<script type="module" src="/src/main.ts"></script><script type="module" src="/src/navigation.js"></script>
 </body>
 
 </html>
