@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:best-practices"],
+  "timezone": "Asia/Tokyo",
+  "schedule": ["before 9am on monday"],
+  "automerge": true,
+  "dependencyDashboard": { "enabled": true },
+  "packageRules": [
+    {
+      "matchManagers": ["circleci"],
+      "groupName": "circleci"
+    },
+    {
+      "matchManagers": ["cargo"],
+      "groupName": "rust dependencies"
+    },
+    {
+      "matchManagers": ["npm"],
+      "groupName": "js dependencies"
+    },
+    {
+      "matchManagers": ["pre-commit"],
+      "groupName": "pre-commit hooks"
+    }
+  ]
+}
